@@ -1,0 +1,338 @@
+@use "../utilities" as *;
+
+/**----------------------------------------
+START: Contact CSS
+----------------------------------------*/
+.tj-contact-section {
+	background-color: var(--tj-color-theme-dark);
+	border-radius: 12px;
+	position: relative;
+	z-index: 1;
+	.sec-heading {
+		margin-inline-start: 0;
+		margin-inline-end: 0;
+		margin-bottom: 35px;
+		.sec-title {
+			color: var(--tj-color-common-white);
+		}
+	}
+}
+.global-map {
+	width: calc(100% + 530px);
+	height: 100%;
+	position: relative;
+	z-index: -1;
+	.global-map-img {
+		background-repeat: no-repeat;
+		background-size: contain;
+		background-position: center;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		left: -115px;
+		@media #{$xxl} {
+			left: 0;
+		}
+		@media #{$xl, $lg, $md,} {
+			left: 0;
+		}
+		@media #{$sm, $xs} {
+			left: 0;
+		}
+	}
+	@media #{$xl} {
+		width: calc(100% + 360px);
+	}
+	@media #{$lg} {
+		width: calc(100% + 280px);
+	}
+	@media #{$md} {
+		width: 100%;
+		height: 385px;
+		margin-bottom: 40px;
+	}
+	@media #{$sm, $xs} {
+		width: 100%;
+		height: 285px;
+		margin-bottom: 40px;
+	}
+}
+.map-area {
+	width: 100%;
+	height: 100%;
+	border-radius: 12px;
+	overflow: hidden;
+	mix-blend-mode: luminosity;
+	iframe {
+		width: 100%;
+		height: 100%;
+		min-height: 360px;
+		display: block;
+	}
+	@media #{$md, $sm, $xs} {
+		height: auto;
+		margin-top: 30px;
+	}
+}
+.contact-info {
+	.contact-item {
+		padding: 13px 0 9px 0;
+		.subtitle {
+			display: block;
+			font-size: 14px;
+			line-height: 1;
+			color: var(--tj-color-text-body);
+			margin-bottom: 7px;
+		}
+		a {
+			&:hover {
+				color: var(--tj-color-theme-primary);
+			}
+		}
+		.contact-link {
+			display: inline-block;
+			color: var(--tj-color-common-white);
+		}
+		&:last-child {
+			border: 0;
+		}
+	}
+}
+
+.contact-form {
+	background-color: var(--tj-color-theme-bg);
+	margin-inline-start: 0;
+	margin-inline-end: 15px;
+	padding: 60px 50px;
+	border-radius: 12px;
+	.title {
+		margin-bottom: 35px;
+		@media #{$sm, $xs} {
+			margin-bottom: 25px;
+		}
+	}
+	.form-input {
+		margin-bottom: 27px;
+		position: relative;
+		textarea,
+		select,
+		.nice-select,
+		input[type="tel"],
+		input[type="text"],
+		input[type="email"] {
+			background-color: transparent;
+			color: var(--tj-color-text-body);
+			padding: 11px 0;
+			border: 0;
+			border-bottom: 1px solid var(--tj-color-border-1);
+			@include placeholder {
+				color: var(--tj-color-grey-2);
+			}
+			&:focus {
+				border-color: var(--tj-color-theme-primary);
+			}
+			@media #{$sm, $xs} {
+				padding: 6px 0 10px;
+			}
+		}
+		.cf-label {
+			font-size: 16px;
+			color: var(--tj-color-grey-2);
+			position: absolute;
+			top: 10px;
+			left: 0;
+			pointer-events: none;
+			@include transition(all 0.2s linear 0s);
+			span {
+				color: var(--tj-color-theme-primary);
+			}
+		}
+		textarea,
+		input[type="tel"],
+		input[type="text"],
+		input[type="email"] {
+			&:focus {
+				~ .cf-label {
+					visibility: hidden;
+					opacity: 0;
+				}
+			}
+		}
+		.nice-select {
+			color: var(--tj-color-grey-2);
+			line-height: 1.5;
+			border-radius: 0;
+			margin-bottom: 27px;
+			.list {
+				width: 100%;
+				border-radius: 8px;
+				.option {
+					color: var(--tj-color-theme-dark);
+					&:hover,
+					&.focus {
+						color: var(--tj-color-theme-dark);
+					}
+				}
+			}
+			&::after {
+				border-color: var(--tj-color-common-white);
+				width: 8px;
+				height: 8px;
+				top: 20px;
+				right: 5px;
+			}
+			@media #{$sm, $xs} {
+				margin-bottom: 20px;
+			}
+		}
+		textarea {
+			height: 130px;
+			resize: none;
+			padding-top: 0;
+		}
+		&.message-input {
+			margin-bottom: 30px;
+		}
+		@media #{$sm, $xs} {
+			margin-bottom: 20px;
+		}
+	}
+
+	@media #{$md, $sm, $xs} {
+		max-width: 100%;
+	}
+	@media #{$sm, $xs} {
+		padding: 25px 20px 30px;
+	}
+
+	&.style-2 {
+		max-width: 610px;
+		background-color: rgba(255, 255, 255, 0.1);
+		backdrop-filter: blur(6px);
+		.title {
+			margin-bottom: 40px;
+			@media #{$md, $sm, $xs} {
+				margin-bottom: 20px;
+			}
+		}
+		.form-input {
+			margin-bottom: 27px;
+			position: relative;
+			&.message-input {
+				margin-top: 0;
+				@media #{$xs} {
+					margin-top: 20px;
+				}
+			}
+
+			textarea,
+			input[type="tel"],
+			input[type="text"],
+			input[type="email"] {
+				color: var(--tj-color-text-body-2);
+				padding: 11px 0;
+				border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+				@include placeholder {
+					color: var(--tj-color-text-body-2);
+				}
+				&:focus {
+					border-color: rgba(255, 255, 255, 1);
+				}
+			}
+			.cf-label {
+				color: var(--tj-color-text-body-2);
+			}
+			.nice-select {
+				color: var(--tj-color-text-body-2);
+				border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+				&.open {
+					border-color: rgba(255, 255, 255, 1);
+				}
+				&::after {
+					color: var(--tj-color-common-white);
+				}
+			}
+			textarea {
+				height: 140px;
+			}
+		}
+		@media #{$lg, $md, $sm, $xs} {
+			margin-inline-end: 0;
+		}
+		@media #{$lg, $sm, $xs} {
+			padding: 35px 20px 40px;
+		}
+	}
+	@media #{$md, $sm, $xs} {
+		margin-inline-end: 0;
+	}
+}
+
+.contact {
+	&-item {
+		&.style-2 {
+			padding: 30px 25px 40px;
+			background-color: var(--tj-color-theme-bg);
+			text-align: center;
+			border-radius: 12px;
+			@media #{$sm, $md} {
+				padding: 25px;
+			}
+			p {
+				margin-bottom: 0;
+				max-width: 224px;
+				margin: 0 auto;
+			}
+			&:hover {
+				.contact-icon {
+					background: var(--tj-color-theme-primary);
+					i {
+						color: var(--tj-color-common-white);
+					}
+				}
+			}
+			.contact-icon {
+				width: 88px;
+				height: 88px;
+				display: inline-flex;
+				justify-content: center;
+				align-items: center;
+				background: var(--tj-color-theme-dark);
+				border-radius: 50%;
+				margin-bottom: 22px;
+				@include transition(all 0.3s ease-in-out 0s);
+				i {
+					font-size: 32px;
+					color: var(--tj-color-theme-primary);
+				}
+			}
+			.contact-title {
+				font-size: 24px;
+				font-weight: var(--tj-fw-sbold);
+				margin-bottom: 20px;
+				@media #{$sm, $md} {
+					font-size: 20px;
+				}
+			}
+			.contact-list {
+				list-style: none;
+				li {
+					a {
+						color: var(--tj-color-text-body);
+						&:hover {
+							color: var(--tj-color-theme-primary);
+						}
+					}
+					&.active {
+						a {
+							font-weight: var(--tj-fw-sbold);
+							color: var(--tj-color-theme-primary);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+/* !END: Contact CSS */

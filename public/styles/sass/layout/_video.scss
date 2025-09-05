@@ -1,0 +1,156 @@
+@use "../utilities" as *;
+
+/**----------------------------------------
+START: Video CSS
+----------------------------------------*/
+.tj-video-section {
+	border-radius: 24px;
+	position: relative;
+	z-index: 2;
+	overflow: hidden;
+
+	@media #{$md,$sm,$xs} {
+		border-radius: 16px;
+		margin: 0 12px;
+	}
+	.video-bg {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		img {
+			width: 100%;
+			height: 150%;
+			object-fit: cover;
+		}
+	}
+}
+.video-content-area {
+	position: relative;
+	height: 820px;
+	.video-wrap {
+		background-color: var(--tj-color-theme-dark);
+		position: absolute;
+		right: 0;
+		bottom: 0;
+		padding: 16px 16px 0 16px;
+		border-radius: 24px 24px 0 0;
+		z-index: 1;
+		@media #{$md,$sm,$xs} {
+			padding: 15px 15px 0 15px;
+			border-radius: 15px 15px 0 0;
+		}
+		@media #{$sm,$xs} {
+			max-width: 281px;
+			width: 100%;
+			margin: 0 auto;
+			left: 0;
+		}
+
+		&::after,
+		&::before {
+			content: "";
+			position: absolute;
+			background-color: transparent;
+			bottom: 0;
+			left: -24px;
+			width: 24px;
+			height: 50px;
+			box-shadow: 0 24px 0 0 var(--tj-color-theme-dark);
+			border-radius: 0 0 24px 0;
+			z-index: -1;
+			@media #{$md, $sm, $xs} {
+				border-radius: 0 0 15px 0;
+			}
+		}
+		&::after {
+			left: auto;
+			right: -24px;
+			border-radius: 0 0 0 24px;
+			@media #{$md, $sm, $xs} {
+				border-radius: 0 0 0 15px;
+			}
+		}
+	}
+	.video-btn {
+		background-color: var(--tj-color-theme-bg);
+		border-radius: 16px;
+		flex-direction: row-reverse;
+		justify-content: space-between;
+		padding: 42px 50px 42px 45px;
+
+		.video-icon {
+			background-color: var(--tj-color-theme-primary);
+			color: var(--tj-color-common-white);
+			width: 85px;
+			height: 85px;
+			animation: pulsePrimary 2s linear infinite;
+			@media #{$lg} {
+				width: 75px;
+				height: 75px;
+			}
+			@media #{$md,$sm,$xs} {
+				width: 65px;
+				height: 65px;
+			}
+		}
+		.video-text {
+			max-width: 160px;
+			width: 100%;
+			font-size: 24px;
+			color: var(--tj-color-common-white);
+			position: relative;
+			span {
+				background-image: linear-gradient(
+					to bottom,
+					currentColor 0%,
+					currentColor 100%
+				);
+				background-size: 100% 1px;
+				background-repeat: no-repeat;
+				background-position: 0 85%;
+				display: inline;
+				@include transition(all 0.5s ease-in-out 0s);
+			}
+			@media #{$lg} {
+				font-size: 21px;
+			}
+			@media #{$md,$sm,$xs} {
+				max-width: 130px;
+				font-size: 19px;
+			}
+		}
+		&:hover {
+			.video-text {
+				span {
+					background-size: 0 1px;
+				}
+			}
+			.video-icon {
+				background-color: var(--tj-color-theme-primary);
+				color: var(--tj-color-common-white);
+			}
+		}
+		@media #{$lg} {
+			padding: 35px 40px;
+			border-radius: 12px;
+		}
+		@media #{$md} {
+			padding: 25px 30px;
+			border-radius: 10px;
+		}
+		@media #{$sm,$xs} {
+			padding: 20px;
+			border-radius: 10px;
+		}
+	}
+	@media #{$lg, $md} {
+		height: 650px;
+	}
+	@media #{$sm, $xs} {
+		height: 500px;
+	}
+}
+
+/* !END: Video CSS */

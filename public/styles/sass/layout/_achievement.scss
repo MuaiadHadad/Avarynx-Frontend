@@ -1,0 +1,89 @@
+@use "../utilities" as *;
+
+/**----------------------------------------
+START: Achievement CSS
+----------------------------------------*/
+.tj-achievement-section {
+	.sec-heading {
+		max-width: 550px;
+	}
+}
+.achievement {
+	&-img {
+		width: 100%;
+		height: 100%;
+		border-radius: 16px;
+		overflow: hidden;
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+	}
+	&-area {
+		background-color: var(--tj-color-theme-bg);
+		border-radius: 24px;
+		padding: 20px 30px;
+		@media #{$sm, $xs} {
+			padding: 10px 15px;
+			border-radius: 18px;
+		}
+	}
+	&-item {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		gap: 10px;
+		border-bottom: 1px solid var(--tj-color-border-1);
+		padding: 26px 0;
+		&:last-child {
+			border-bottom: 0;
+		}
+		.content {
+			max-width: 390px;
+			width: 100%;
+			display: inline-flex;
+			gap: 8px;
+			@media #{$lg} {
+				max-width: 300px;
+			}
+			@media #{$sm, $xs} {
+				max-width: 275px;
+			}
+		}
+		.no {
+			color: var(--tj-color-grey-2);
+			font-size: 16px;
+			line-height: 1;
+			font-weight: var(--tj-fw-medium);
+			font-family: var(--tj-ff-heading);
+			margin-top: 6px;
+		}
+		.title {
+			margin-bottom: 0;
+			@media #{$lg, $sm, $xs} {
+				font-size: 20px;
+			}
+		}
+		.year {
+			color: var(--tj-color-theme-primary);
+			font-size: 20px;
+			line-height: 1;
+			font-weight: var(--tj-fw-medium);
+			font-family: var(--tj-ff-heading);
+			margin-top: 6px;
+			@media #{$lg, $md, $sm, $xs} {
+				font-size: 17px;
+			}
+			@media (max-width: 380px) {
+				padding-left: 28px;
+				margin-top: 3px;
+			}
+		}
+		@media #{$sm, $xs} {
+			padding: 18px 0;
+		}
+	}
+}
+
+/* !END: Achievement CSS */

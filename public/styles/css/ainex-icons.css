@@ -1,0 +1,235 @@
+@font-face {
+	font-family: "ainex-icons";
+	src: url("../fonts/ainex-icons.eot?axd1rp");
+	src: url("../fonts/ainex-icons.eot?axd1rp#iefix") format("embedded-opentype"),
+		url("../fonts/ainex-icons.ttf?axd1rp") format("truetype"),
+		url("../fonts/ainex-icons.woff?axd1rp") format("woff"),
+		url("../fonts/ainex-icons.svg?axd1rp#ainex-icons") format("svg");
+	font-weight: normal;
+	font-style: normal;
+	font-display: block;
+}
+
+[class^="tji-"],
+[class*=" tji-"] {
+	/* use !important to prevent issues with browser extensions that change fonts */
+	font-family: "ainex-icons" !important;
+	speak: never;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.tji-idea:before {
+	content: "\e901";
+}
+.tji-arrow-right-2:before {
+	content: "\e902";
+}
+.tji-arrow-menu:before {
+	content: "\e903";
+}
+.tji-arrow-left:before {
+	content: "\e904";
+}
+.tji-arrow-right:before {
+	content: "\e905";
+}
+.tji-arrow-right-3:before {
+	content: "\e906";
+}
+.tji-arrow-left-long:before {
+	content: "\e907";
+}
+.tji-arrow-right-long:before {
+	content: "\e908";
+}
+.tji-arrow-down:before {
+	content: "\e909";
+}
+.tji-arrow-down-long:before {
+	content: "\e910";
+}
+.tji-search:before {
+	content: "\e911";
+}
+.tji-home:before {
+	content: "\e912";
+}
+.tji-envelop:before {
+	content: "\e913";
+}
+.tji-envelop-2:before {
+	content: "\e914";
+}
+.tji-phone:before {
+	content: "\e915";
+}
+.tji-phone-2:before {
+	content: "\e916";
+}
+.tji-location:before {
+	content: "\e917";
+}
+.tji-location-2:before {
+	content: "\e918";
+}
+.tji-plane:before {
+	content: "\e919";
+}
+.tji-clock:before {
+	content: "\e920";
+}
+.tji-ai:before {
+	content: "\e921";
+}
+.tji-cheer-up:before {
+	content: "\e922";
+}
+.tji-hand:before {
+	content: "\e923";
+}
+.tji-trophy:before {
+	content: "\e924";
+}
+.tji-team:before {
+	content: "\e925";
+}
+.tji-discovery:before {
+	content: "\e926";
+}
+.tji-development:before {
+	content: "\e927";
+}
+.tji-support:before {
+	content: "\e928";
+}
+.tji-innovation:before {
+	content: "\e929";
+}
+.tji-integration:before {
+	content: "\e930";
+}
+.tji-technology:before {
+	content: "\e931";
+}
+.tji-support-2:before {
+	content: "\e932";
+}
+.tji-play:before {
+	content: "\e933";
+}
+.tji-quote:before {
+	content: "\e934";
+}
+.tji-plus:before {
+	content: "\e935";
+}
+.tji-minus:before {
+	content: "\e936";
+}
+.tji-stars:before {
+	content: "\e937";
+}
+.tji-subtitle:before {
+	content: "\e938";
+}
+.tji-subtitle-2:before {
+	content: "\e939";
+}
+.tji-marquee-icon:before {
+	content: "\e940";
+}
+.tji-user:before {
+	content: "\e941";
+}
+.tji-budget:before {
+	content: "\e942";
+}
+.tji-chart:before {
+	content: "\e943";
+}
+.tji-calendar:before {
+	content: "\e944";
+}
+.tji-chat:before {
+	content: "\e945";
+}
+.tji-comment:before {
+	content: "\e946";
+}
+.tji-window:before {
+	content: "\e947";
+}
+.tji-check:before {
+	content: "\e948";
+}
+.tji-check-2:before {
+	content: "\e949";
+}
+.tji-rocket:before {
+	content: "\e950";
+}
+.tji-share:before {
+	content: "\e951";
+}
+.tji-plane-2:before {
+	content: "\e952";
+}
+.tji-facebook:before {
+	content: "\e953";
+}
+.tji-instagram:before {
+	content: "\e954";
+}
+.tji-linkedin:before {
+	content: "\e955";
+}
+.tji-x-twitter:before {
+	content: "\e956";
+}
+.tji-whatsapp:before {
+	content: "\e957";
+}
+.tji-telegram:before {
+	content: "\e958";
+}
+.tji-messenger:before {
+	content: "\e959";
+}
+.tji-youtube:before {
+	content: "\e960";
+}
+.tji-vimeo:before {
+	content: "\e961";
+}
+.tji-pinterest:before {
+	content: "\e962";
+}
+.tji-spotify:before {
+	content: "\e963";
+}
+.tji-threads:before {
+	content: "\e964";
+}
+.tji-tumblr:before {
+	content: "\e965";
+}
+.tji-github:before {
+	content: "\e966";
+}
+.tji-google:before {
+	content: "\e967";
+}
+.tji-apple:before {
+	content: "\e968";
+}
+.tji-signal:before {
+	content: "\e969";
+}

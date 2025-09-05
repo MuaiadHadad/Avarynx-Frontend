@@ -1,0 +1,1 @@
+Place your .glb avatar files in this folder. Then set /assets/avatars/your_avatar.glb in the UI or siteconfig.json.

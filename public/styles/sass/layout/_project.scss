@@ -1,0 +1,341 @@
+@use "../utilities" as *;
+
+/**----------------------------------------
+START: Project CSS
+----------------------------------------*/
+.tj-project-section {
+	position: relative;
+	&-2 {
+		background-color: var(--tj-color-theme-bg);
+		border-radius: 24px;
+		position: relative;
+		z-index: 1;
+		.content-wrap {
+			max-width: 330px;
+			@media #{$md, $sm, $xs} {
+				max-width: 100%;
+			}
+		}
+	}
+}
+
+.project-slider {
+	overflow: inherit;
+}
+.project-wrapper-2 {
+	max-width: 834px;
+	margin-inline-start: auto;
+}
+.project-wrapper-3 {
+	padding: 0 30px;
+	@media #{$lg, $md} {
+		padding: 0 20px;
+	}
+	@media #{$sm, $xs} {
+		padding: 0 15px;
+	}
+}
+
+.project-item {
+	background-color: var(--tj-color-theme-bg);
+	position: relative;
+	border-radius: 12px;
+	overflow: hidden;
+	padding: 15px;
+	.project-img {
+		position: relative;
+		border-radius: 12px;
+		overflow: hidden;
+		@include transition(all 0.4s linear 0s);
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			@include transition(all 0.4s linear 0s);
+		}
+		@media #{$sm, $xs} {
+			height: 280px;
+		}
+	}
+	.project-content {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		padding: 25px 15px 10px;
+		@media #{$xs} {
+			padding: 20px 5px 5px;
+		}
+	}
+	.title {
+		color: var(--tj-color-common-white);
+		max-width: 350px;
+		width: 100%;
+		margin-bottom: 0;
+		a {
+			display: inline-block;
+			&:hover {
+				color: var(--tj-color-theme-primary);
+			}
+		}
+		@media #{$xxl} {
+			width: calc(100% - 60px);
+		}
+		@media #{$xl, $lg, $sm, $xs} {
+			max-width: 100%;
+			width: calc(100% - 60px);
+		}
+		@media #{$sm, $xs} {
+			width: calc(100% - 50px);
+		}
+	}
+	.categories {
+		position: absolute;
+		top: 15px;
+		left: 15px;
+		padding: 0 10px 10px 0;
+		background-color: var(--tj-color-theme-bg);
+		border-radius: 0 0 12px 0;
+	}
+	.icon-btn {
+		@media #{$sm, $xs} {
+			width: 45px;
+			height: 45px;
+			font-size: 22px;
+		}
+	}
+	&:hover {
+		.project-img {
+			img {
+				transform: scale(1.1);
+			}
+		}
+		.icon-btn {
+			background-color: var(--tj-color-theme-primary);
+		}
+	}
+
+	&.style-2 {
+		background-color: var(--tj-color-theme-dark);
+		padding: 30px 30px 0 30px;
+		margin-bottom: 30px;
+		border-top-left-radius: 0;
+		&:last-child {
+			margin-bottom: 0;
+		}
+		.categories {
+			left: 0;
+			top: 0;
+		}
+		.project-content {
+			padding: 0 0 24px;
+			@media #{$sm, $xs} {
+				padding: 0 0 16px;
+			}
+		}
+		.title {
+			max-width: 450px;
+			padding-top: 25px;
+			@media #{$sm, $xs} {
+				max-width: calc(100% - 65px);
+			}
+		}
+		.icon-btn {
+			background-color: var(--tj-color-theme-bg);
+			width: 60px;
+			height: 60px;
+			margin-bottom: 3px;
+			i {
+				color: var(--tj-color-theme-primary);
+			}
+			&:hover {
+				background-color: var(--tj-color-theme-primary);
+				i {
+					color: var(--tj-color-common-white);
+				}
+			}
+			@media #{$sm, $xs} {
+				width: 55px;
+				height: 55px;
+			}
+		}
+		.project-img {
+			height: 0;
+			border-radius: 16px;
+			@include transition(all 0.4s linear 0s);
+			img {
+				transform: scale(1);
+				&:hover {
+					transform: scale(1.1);
+				}
+			}
+			@media #{$md} {
+				height: 320px;
+				margin-bottom: 20px;
+			}
+			@media #{$sm, $xs} {
+				height: 280px;
+				margin-bottom: 20px;
+			}
+		}
+		&.active {
+			.project-img {
+				height: 373px;
+				margin-bottom: 30px;
+				@media #{$md} {
+					height: 320px;
+					margin-bottom: 20px;
+				}
+				@media #{$sm, $xs} {
+					height: 280px;
+					margin-bottom: 20px;
+				}
+			}
+		}
+		@media #{$md, $sm, $xs} {
+			padding: 30px 20px 0 20px;
+			margin-bottom: 20px;
+		}
+	}
+
+	&.style-3 {
+		padding: 30px 30px 25px 30px;
+		border-radius: 16px;
+		.categories {
+			padding: 0;
+			border-radius: 0;
+			position: unset;
+			margin-bottom: 12px;
+			&::before,
+			&::after {
+				display: none;
+			}
+		}
+		.project-content {
+			flex-direction: column;
+			align-items: start;
+			padding: 30px 0 0 0;
+			@media #{$lg, $sm, $xs} {
+				padding: 20px 0 0 0;
+			}
+		}
+		.title {
+			@media #{$md} {
+				max-width: 100%;
+				width: calc(100% - 50px);
+			}
+			@media #{$lg} {
+				font-size: 20px;
+			}
+		}
+		.project-btn {
+			position: absolute;
+			right: 0;
+			bottom: 0;
+			width: auto;
+			height: auto;
+			background-color: var(--tj-color-theme-dark);
+			padding: 30px 0 0 30px;
+			border-radius: 60px 0 0 0;
+			z-index: 1;
+			&::after,
+			&::before {
+				content: "";
+				position: absolute;
+				background-color: transparent;
+				top: -48px;
+				right: 0;
+				width: 24px;
+				height: 48px;
+				box-shadow: 0 24px 0 0 var(--tj-color-theme-dark);
+				border-bottom-right-radius: 24px;
+				z-index: -1;
+				pointer-events: none;
+			}
+			&::after {
+				top: auto;
+				right: auto;
+				bottom: 0;
+				left: -24px;
+			}
+			.icon-btn {
+				background-color: var(--tj-color-theme-primary);
+				overflow: hidden;
+				text-shadow: -45px 0 0;
+				transform: rotate(-45deg);
+				i {
+					transform: rotate(0);
+				}
+				&:hover {
+					transform: rotate(0);
+				}
+			}
+			@media #{$lg, $sm, $xs} {
+				padding: 20px 0 0 20px;
+				border-radius: 40px 0 0 0;
+			}
+			@media #{$md} {
+				padding: 25px 0 0 25px;
+				border-radius: 55px 0 0 0;
+			}
+		}
+		@media #{$lg, $sm, $xs} {
+			padding: 20px;
+		}
+
+		&:hover {
+			.icon-btn {
+				i {
+					transform: translateX(45px);
+				}
+			}
+		}
+	}
+}
+
+.categories {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	padding: 0 10px 10px 0;
+	background-color: var(--tj-color-theme-bg);
+	position: relative;
+	z-index: 1;
+	&::after,
+	&::before {
+		content: "";
+		position: absolute;
+		background-color: transparent;
+		top: 0px;
+		right: -25px;
+		width: 25px;
+		height: 12px;
+		box-shadow: 12px 0 0 0 var(--tj-color-theme-bg);
+		border-radius: 0 12px 0 0;
+		z-index: -1;
+		transform: scaleX(-1);
+	}
+	&::after {
+		top: auto;
+		right: auto;
+		bottom: -12px;
+		left: 0;
+	}
+	a {
+		background-color: var(--tj-color-theme-dark);
+		font-size: 16px;
+		line-height: 1;
+		color: var(--tj-color-theme-primary);
+		font-weight: var(--tj-fw-medium);
+		padding: 5px 10px 6px;
+		display: inline-flex;
+		overflow: hidden;
+		border-radius: 8px;
+		&:hover {
+			background-color: var(--tj-color-theme-primary);
+			color: var(--tj-color-common-white);
+		}
+	}
+}
+
+/* !END: Project CSS */

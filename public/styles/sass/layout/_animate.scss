@@ -1,0 +1,249 @@
+@use "../utilities" as *;
+
+/**----------------------------------------
+START: Animate CSS
+----------------------------------------*/
+
+@keyframes sticky {
+	0% {
+		transform: translateY(-100%);
+	}
+	100% {
+		transform: translateY(0%);
+	}
+}
+
+@keyframes pulse {
+	from {
+		transform: scale(1);
+	}
+	to {
+		transform: scale(0.8);
+	}
+}
+
+@keyframes pulse2 {
+	0% {
+		box-shadow: 0 0 0 0 rgba(255, 255, 255, 1);
+	}
+	100% {
+		box-shadow: 0 0 0 20px rgba(0, 0, 0, 0);
+	}
+}
+
+@keyframes pulse3 {
+	0% {
+		box-shadow: 0 0 0 0 rgba(255, 255, 255, 1);
+	}
+	100% {
+		box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+	}
+}
+
+@keyframes pulsePrimary {
+	0% {
+		box-shadow: 0 0 0 0 rgba(255, 0, 127, 0.5);
+	}
+	100% {
+		box-shadow: 0 0 0 12px rgba(255, 0, 127, 0.1);
+	}
+}
+
+@keyframes jumping {
+	0% {
+		transform: translateY(2px);
+	}
+	25% {
+		transform: translateY(5px);
+	}
+	50% {
+		transform: translateY(-6px);
+	}
+	75% {
+		transform: translateY(5px);
+	}
+	100% {
+		transform: translateY(2px);
+	}
+}
+
+@keyframes linehover {
+	0% {
+		width: 100%;
+	}
+	50% {
+		width: 0;
+		right: 0;
+	}
+	100% {
+		width: 100%;
+		left: 0;
+	}
+}
+
+@keyframes textrotate {
+	0% {
+		transform: translate(-50%, -50%) rotate(0deg);
+	}
+	100% {
+		transform: translate(-50%, -50%) rotate(360deg);
+	}
+}
+
+@keyframes rotateClock {
+	0% {
+		-webkit-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+	100% {
+		-webkit-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes rotateAntiClock {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(-360deg);
+	}
+}
+
+@keyframes gelatine {
+	from,
+	to {
+		transform: scale(1, 1);
+	}
+	25% {
+		transform: scale(0.7, 1.1);
+	}
+	50% {
+		transform: scale(1.1, 0.7);
+	}
+	75% {
+		transform: scale(0.95, 1.05);
+	}
+}
+
+@include keyframes(borderanimate) {
+	0% {
+		transform: translate(-50%, -50%) scale(0.8);
+	}
+	60% {
+		opacity: 1;
+	}
+	100% {
+		transform: translate(-50%, -50%) scale(1.5);
+		opacity: 0;
+	}
+}
+
+@keyframes bellshake {
+	0% {
+		transform: rotate(0);
+	}
+	10% {
+		transform: rotate(5deg);
+	}
+	20% {
+		transform: rotate(-5deg);
+	}
+	30% {
+		transform: rotate(4deg);
+	}
+	40% {
+		transform: rotate(-4deg);
+	}
+	50% {
+		transform: rotate(2deg);
+	}
+	60% {
+		transform: rotate(-2deg);
+	}
+	70% {
+		transform: rotate(1deg);
+	}
+	80%,
+	90%,
+	100% {
+		transform: rotate(0);
+	}
+}
+
+@keyframes shine {
+	0% {
+		transform: skewX(-25deg) translateX(0);
+	}
+	100% {
+		transform: skewX(-25deg) translateX(250%);
+	}
+}
+
+@keyframes bounceTwice {
+	0% {
+		transform: translateY(0);
+	}
+	25% {
+		transform: translateY(-5px);
+	}
+	50% {
+		transform: translateY(0);
+	}
+	75% {
+		transform: translateY(-5px);
+	}
+	100% {
+		transform: translateY(0);
+	}
+}
+
+.zoomInOut {
+	animation: zoomEffect 3s linear infinite;
+}
+@include keyframes(zoomEffect) {
+	0% {
+		transform: scale(0.9);
+	}
+	50% {
+		transform: scale(1.2);
+	}
+	100% {
+		transform: scale(0.9);
+	}
+}
+
+@keyframes running {
+	0% {
+		top: 100%;
+	}
+	50% {
+		top: 0%;
+	}
+	100% {
+		top: 100%;
+	}
+}
+
+@keyframes running-2 {
+	0% {
+		top: 0%;
+	}
+	50% {
+		top: 100%;
+	}
+	100% {
+		top: 0%;
+	}
+}
+
+@keyframes flip {
+	from {
+		transform: rotateY(0deg);
+	}
+	to {
+		transform: rotateY(360deg);
+	}
+}
+
+/* !END: Animate CSS */

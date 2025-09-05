@@ -1,0 +1,67 @@
+@use "../utilities" as *;
+/**----------------------------------------
+START: Back to top CSS
+----------------------------------------*/
+.back-to-top {
+	&-wrapper {
+		position: fixed;
+		right: 60px;
+		bottom: 0;
+		display: block;
+		border-radius: 50%;
+		z-index: 99;
+		opacity: 0;
+		visibility: hidden;
+		transition: all 0.3s ease-in-out;
+		cursor: pointer;
+		@media #{$md} {
+			right: 45px;
+		}
+		@media #{$sm, $xs} {
+			right: 15px;
+		}
+	}
+	&-btn-show {
+		visibility: visible;
+		opacity: 1;
+		bottom: 60px;
+
+		&:hover {
+			transform: translateY(-6px);
+		}
+		@media #{$xl} {
+			right: 50px;
+		}
+		@media #{$lg, $md} {
+			right: 30px;
+			bottom: 30px;
+		}
+		@media #{$sm, $xs} {
+			bottom: 25px;
+		}
+	}
+	&-btn {
+		color: var(--tj-color-heading-primary);
+		line-height: 1;
+		font-weight: var(--tj-fw-sbold);
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		span {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 56px;
+			height: 56px;
+			font-size: 36px;
+			color: var(--tj-color-common-white);
+			background-color: var(--tj-color-theme-primary);
+			border-radius: 50%;
+			i {
+				animation: bounceTwice 3s linear infinite;
+			}
+		}
+	}
+}
+
+/* !END: Back to top CSS */

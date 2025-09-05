@@ -1,0 +1,178 @@
+@use "../utilities" as *;
+
+/**----------------------------------------
+START: Faq CSS
+----------------------------------------*/
+.tj-faq-section {
+	background-color: var(--tj-color-theme-bg);
+	border-radius: 24px;
+	.sec-heading {
+		max-width: 550px;
+		margin-inline-end: 0;
+		margin-inline-start: 0;
+		margin-bottom: 30px;
+	}
+	&-2 {
+		.content-wrap {
+			max-width: 360px;
+			@media #{$md, $sm, $xs} {
+				max-width: 100%;
+			}
+		}
+	}
+	&-3 {
+		.sec-heading {
+			margin-bottom: 30px;
+		}
+	}
+}
+.faq-img {
+	max-width: 480px;
+	width: 100%;
+	position: relative;
+	border-radius: 12px;
+	overflow: hidden;
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+	@media #{$md, $sm, $xs} {
+		max-width: 100%;
+	}
+}
+
+.tj-faq {
+	.accordion-item {
+		margin-bottom: 20px;
+		padding: 0 25px 0 30px;
+		border-radius: 8px;
+		border: 0;
+		position: relative;
+		background-color: var(--tj-color-theme-dark);
+		&:last-child {
+			margin-bottom: 0;
+		}
+		.faq-title {
+			font-size: 20px;
+			text-align: left;
+			color: var(--tj-color-heading-primary);
+			font-family: var(--tj-ff-heading);
+			font-weight: var(--tj-fw-medium);
+			padding: 21px 30px 21px 0;
+			width: 100%;
+			position: relative;
+			z-index: 2;
+			transition: none;
+			&::after {
+				content: "\e935";
+				color: var(--tj-color-theme-primary);
+				font-size: 20px;
+				line-height: 1;
+				font-family: "ainex-icons" !important;
+				font-weight: normal;
+				text-align: center;
+				position: absolute;
+				right: 0;
+				top: 26px;
+				width: 22px;
+				height: 22px;
+				transition: none;
+			}
+			@media #{$md, $sm, $xs} {
+				padding: 20px 30px 20px 0;
+			}
+		}
+		.accordion-body {
+			padding: 5px 0 30px;
+			color: var(--tj-color-white-2);
+			p {
+				&:last-child {
+					margin-bottom: 0;
+				}
+			}
+		}
+		&.active {
+			background-image: linear-gradient(
+				var(--tj-color-theme-primary) 0%,
+				var(--tj-color-theme-bg) 100%
+			);
+			.faq-title {
+				&::after {
+					content: "\e936";
+					color: var(--tj-color-common-white);
+				}
+			}
+		}
+
+		@media #{$md, $sm, $xs} {
+			padding: 0 15px 0 20px;
+		}
+	}
+
+	@media #{$md, $sm, $xs} {
+		padding-bottom: 40px;
+	}
+
+	&.style-2 {
+		.accordion-item {
+			background-color: var(--tj-color-theme-bg);
+			&.active {
+				background-image: linear-gradient(
+					var(--tj-color-theme-primary) 0%,
+					var(--tj-color-theme-dark) 100%
+				);
+			}
+		}
+	}
+
+	&.style-3 {
+		.accordion-item {
+			background: var(--tj-color-theme-bg);
+			border: 2px solid var(--tj-color-theme-bg);
+			.faq-title {
+				padding: 19px 30px 19px 0;
+				&::after {
+					color: var(--tj-color-grey-2);
+				}
+			}
+			.accordion-body {
+				color: var(--tj-color-grey-3);
+			}
+			&.active {
+				border-color: var(--tj-color-theme-primary);
+				.faq-title {
+					&::after {
+						color: var(--tj-color-theme-primary);
+					}
+				}
+			}
+		}
+	}
+}
+
+.support-specialist {
+	max-width: 450px;
+	width: 100%;
+	background-color: var(--tj-color-theme-bg);
+	border-radius: 12px;
+	padding: 30px;
+	.author-img {
+		width: 84px;
+		height: 84px;
+		border-radius: 100%;
+		border: 2px solid var(--tj-color-common-white);
+		overflow: hidden;
+	}
+	.desc {
+		margin: 24px 0;
+	}
+	@media #{$md, $sm, $xs} {
+		max-width: 100%;
+	}
+	@media #{$xs} {
+		padding: 30px 20px;
+	}
+}
+
+/* !END: Faq CSS */

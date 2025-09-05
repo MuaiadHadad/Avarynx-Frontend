@@ -1,0 +1,444 @@
+@use "../utilities" as *;
+
+/**----------------------------------------
+START: Countup CSS
+----------------------------------------*/
+.tj-countup-section {
+	position: relative;
+	z-index: 2;
+	overflow: hidden;
+}
+
+.countup-item-wrap {
+	border-radius: 12px;
+	border-top-right-radius: 0;
+	background-color: var(--tj-color-theme-bg);
+	overflow: hidden;
+	padding: 2px;
+	position: relative;
+	&::before {
+		content: "";
+		position: absolute;
+		background-image: linear-gradient(
+			to bottom,
+			rgb(255, 0, 127),
+			rgba(255, 0, 127, 0)
+		);
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		opacity: 0;
+		visibility: hidden;
+		@include transition(all 0.3s ease-in-out 0s);
+	}
+	&:hover {
+		&::before {
+			opacity: 1;
+			visibility: visible;
+		}
+		.countup-item {
+			&.style-1 {
+				.count-icon {
+					border-left-color: var(--tj-color-theme-primary);
+					border-bottom-color: var(--tj-color-theme-primary);
+					&::before,
+					&::after {
+						border-top-color: var(--tj-color-theme-primary);
+						border-right-color: var(--tj-color-theme-primary);
+					}
+					i {
+						transform: rotateY(360deg);
+					}
+				}
+			}
+		}
+	}
+	&.style-2 {
+		&::before {
+			background: var(--tj-color-theme-primary);
+		}
+		&:not(:last-child) {
+			margin-bottom: 30px;
+		}
+		// &:last-child {
+		// 	margin-bottom: 120px;
+		// }
+		.countup-item {
+			&.style-1 {
+				background-color: var(--tj-color-theme-dark);
+				.count-icon {
+					background-color: var(--tj-color-theme-bg);
+					&::before,
+					&::after {
+						box-shadow: 12px 0 0 0 var(--tj-color-theme-bg);
+					}
+				}
+			}
+		}
+	}
+}
+
+.countup-item {
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	&.style-1 {
+		background-color: var(--tj-color-theme-bg);
+		border-radius: 12px;
+		border-top-right-radius: 0;
+		padding: 40px 30px 33px;
+		@include transition(all 0.3s ease-in-out 0s);
+		.count-text {
+			@media #{$lg, $md, $sm, $xs} {
+				font-size: 18px;
+			}
+		}
+		.desc {
+			margin: 0;
+			padding-top: 114px;
+			@media #{$lg} {
+				padding-top: 80px;
+			}
+			@media #{$md, $sm, $xs} {
+				padding-top: 60px;
+			}
+		}
+		.count-icon {
+			position: absolute;
+			top: -2px;
+			right: -2px;
+			width: 82px;
+			height: 82px;
+			padding: 15px;
+			background-color: var(--tj-color-theme-dark);
+			border-bottom-left-radius: 12px;
+			border-left: 2px solid transparent;
+			border-bottom: 2px solid transparent;
+			@include transition(all 0.3s ease-in-out 0s);
+			z-index: 2;
+			&::before,
+			&::after {
+				content: "";
+				position: absolute;
+				background-color: transparent;
+				top: 0px;
+				left: -25px;
+				width: 25px;
+				height: 12px;
+				box-shadow: 12px 0 0 0 var(--tj-color-theme-dark);
+				border-top-right-radius: 12px;
+				z-index: -1;
+				border-top: 2px solid transparent;
+				border-right: 2px solid transparent;
+				@include transition(all 0.3s ease-in-out 0s);
+			}
+			&::after {
+				top: auto;
+				left: auto;
+				bottom: -12px;
+				right: 0;
+			}
+			i {
+				@include transition(all 0.4s linear 0s);
+			}
+		}
+		// &:hover {
+		// 	.count-icon {
+		// 		border-left-color: var(--tj-color-theme-primary);
+		// 		border-bottom-color: var(--tj-color-theme-primary);
+		// 		&::before,
+		// 		&::after {
+		// 			border-top-color: var(--tj-color-theme-primary);
+		// 			border-right-color: var(--tj-color-theme-primary);
+		// 		}
+		// 	}
+		// }
+		@media #{$lg} {
+			padding: 40px 20px 35px;
+		}
+		@media #{$md, $sm, $xs} {
+			padding: 40px 15px 35px;
+		}
+	}
+
+	&.style-2 {
+		padding-right: 40px;
+		.count-separator.sep-2 {
+			&::before {
+				animation-name: running;
+			}
+		}
+		.count-icon {
+			margin-bottom: 20px;
+			i {
+				@include transition(all 0.4s linear 0s);
+			}
+		}
+		.count-text {
+			color: var(--tj-color-text-body);
+			font-size: 18px;
+			@media #{$md} {
+				font-size: 15px;
+			}
+			@media #{$sm, $xs} {
+				font-size: 16px;
+			}
+		}
+		&:hover {
+			.count-icon {
+				i {
+					transform: rotateY(360deg);
+				}
+			}
+		}
+		@media #{$md, $sm, $xs} {
+			padding-right: 0;
+		}
+		@media #{$sm, $xs} {
+			overflow: hidden;
+			padding-bottom: 45px;
+		}
+	}
+}
+
+.count-icon {
+	color: var(--tj-color-theme-primary);
+	font-size: 50px;
+	display: inline-flex;
+	line-height: 1;
+}
+.inline-content {
+	font-size: 76px;
+	line-height: 1;
+	font-weight: var(--tj-fw-medium);
+	color: var(--tj-color-common-white);
+	font-family: var(--tj-ff-heading);
+	display: inline-flex;
+	align-items: center;
+	margin-bottom: 10px;
+	letter-spacing: -1.48px;
+	.odometer {
+		font-weight: var(--tj-fw-medium);
+		color: var(--tj-color-common-white);
+		font-family: var(--tj-ff-heading);
+		display: inline-flex;
+		.odometer-digit,
+		span {
+			font-weight: var(--tj-fw-medium);
+			color: var(--tj-color-common-white);
+			font-family: var(--tj-ff-heading);
+			display: inline-flex;
+			vertical-align: bottom;
+		}
+	}
+
+	@media #{$lg} {
+		font-size: 65px;
+	}
+	@media #{$md, $sm} {
+		font-size: 60px;
+	}
+	@media #{$xs} {
+		font-size: 55px;
+	}
+}
+
+.count-text {
+	color: var(--tj-color-common-white);
+	font-family: var(--tj-ff-heading);
+	font-size: 20px;
+	font-weight: var(--tj-fw-medium);
+	display: block;
+}
+
+.tj-countup-section-2 {
+	position: relative;
+	z-index: 2;
+	.bg-image {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		border-radius: 24px;
+		overflow: hidden;
+		z-index: -1;
+		&::before {
+			content: "";
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			top: 0;
+			left: 0;
+			background-color: var(--tj-color-theme-dark);
+			opacity: 0.7;
+		}
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+	}
+	.sec-heading {
+		margin-bottom: 110px;
+		gap: 20px;
+		.sub-title {
+			margin-top: 5px;
+			margin-bottom: 0;
+		}
+		.sec-title {
+			max-width: 495px;
+			@media #{$lg} {
+				max-width: 380px;
+			}
+		}
+		.desc {
+			max-width: 245px;
+			margin-bottom: 0;
+			@media #{$md, $sm, $xs} {
+				max-width: 350px;
+			}
+		}
+
+		@media #{$lg} {
+			margin-bottom: 90px;
+		}
+		@media #{$md, $sm, $xs} {
+			margin-bottom: 60px;
+		}
+	}
+}
+.count-separator {
+	position: absolute;
+	width: 1px;
+	height: 100%;
+	top: 50%;
+	right: 40px;
+	transform: translateY(-50%);
+	background-color: rgba(255, 255, 255, 0.15);
+	&::before {
+		content: "";
+		position: absolute;
+		width: 5px;
+		height: 10px;
+		top: 50%;
+		left: 49%;
+		transform: translate(-50%, -50%);
+		background-color: var(--tj-color-theme-primary);
+		animation: running-2 4s linear infinite;
+	}
+	@media #{$md} {
+		right: 0;
+	}
+	@media #{$sm, $xs} {
+		top: inherit;
+		bottom: 3px;
+		right: 50%;
+		transform: translate(0, 50%) rotate(90deg);
+		height: 515px;
+	}
+	@media #{$xxs} {
+		height: 366px;
+	}
+}
+
+.tj-countup-section-3 {
+	background-color: var(--tj-color-theme-bg);
+	border-radius: 24px;
+	position: relative;
+	z-index: 1;
+	.sec-heading {
+		.sub-title {
+			background-color: var(--tj-color-theme-dark);
+		}
+	}
+
+	.banner-shape {
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		max-width: 800px;
+		width: 100%;
+		opacity: 0.5;
+		mix-blend-mode: luminosity;
+		@media #{$xxl, $xl, $lg} {
+			max-width: 100%;
+			width: 50%;
+		}
+		@media #{$md, $sm, $xs} {
+			max-width: 100%;
+			width: 100%;
+		}
+	}
+	.blur {
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		max-width: 1077px;
+		width: 100%;
+		@media #{$xxl, $xl, $lg} {
+			max-width: 100%;
+			width: 60%;
+		}
+		@media #{$md, $sm, $xs} {
+			max-width: 100%;
+			width: 100%;
+		}
+	}
+}
+.countup-area {
+	position: relative;
+	z-index: 1;
+}
+.funfact-img {
+	max-width: 617px;
+	width: 100%;
+	margin-left: -60px;
+	margin-top: 80px;
+
+	@media #{$xxl, $xl, $lg} {
+		margin-left: 0;
+	}
+	@media #{$md, $sm, $xs} {
+		margin-left: auto;
+		margin-right: auto;
+		margin-top: 60px;
+	}
+}
+.h4-content-wrap {
+	.tj-primary-btn {
+		margin-top: 8px;
+	}
+}
+.countup-wrap {
+	margin-inline-start: 20px;
+	position: relative;
+	padding-bottom: 120px;
+	&::after {
+		content: "";
+		background-image: linear-gradient(
+			to bottom,
+			rgba(24, 19, 59, 0),
+			rgba(24, 19, 59, 1)
+		);
+		width: 100%;
+		height: 120px;
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		pointer-events: none;
+		@media #{$md, $sm, $xs} {
+			display: none;
+		}
+	}
+	@media #{$lg} {
+		padding-bottom: 90px;
+	}
+	@media #{$md, $sm, $xs} {
+		margin-inline-start: 0;
+		padding-bottom: 0;
+	}
+}
+
+/* !END: Countup CSS */

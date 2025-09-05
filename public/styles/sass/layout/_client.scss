@@ -1,0 +1,160 @@
+@use "../utilities" as *;
+
+/**----------------------------------------
+START: Client CSS
+----------------------------------------*/
+.tj-client-section {
+	position: relative;
+	.client-container {
+		padding: 0;
+		overflow: hidden;
+	}
+	&-2 {
+		background-color: var(--tj-color-theme-primary);
+		border-radius: 12px;
+		padding: 30px 5px;
+		margin-top: 15px;
+		@media #{$sm, $xs} {
+			padding: 18px 5px;
+		}
+	}
+}
+.client-section-gap {
+	padding-top: 80px;
+	padding-bottom: 80px;
+	@media #{$lg} {
+		padding-top: 70px;
+		padding-bottom: 70px;
+	}
+	@media #{$md, $sm, $xs} {
+		padding-top: 50px;
+		padding-bottom: 50px;
+	}
+	&-2 {
+		padding: 100px 0;
+		margin: 120px 0;
+		@media #{$lg} {
+			padding: 80px 0;
+			margin: 90px 0;
+		}
+		@media #{$md, $sm} {
+			padding: 65px 0;
+			margin: 70px 0;
+		}
+		@media #{$xs} {
+			padding: 60px 0;
+			margin: 50px 0;
+		}
+	}
+}
+.client-content {
+	max-width: 500px;
+	margin: 0 auto 50px;
+	padding: 15px 15px 0 15px;
+	text-align: center;
+	.sec-title {
+		letter-spacing: 0;
+		margin-bottom: 0;
+		@media #{$xs} {
+			font-size: 18px;
+		}
+	}
+	span {
+		display: inline-flex;
+	}
+	.client-numbers {
+		color: var(--tj-color-common-white);
+		background-color: var(--tj-color-theme-primary);
+		line-height: 1.35;
+		border-radius: 50px;
+		padding: 0 5px;
+		position: relative;
+		&::before {
+			content: "\e922";
+			font-family: "ainex-icons" !important;
+			font-size: 20px;
+			color: var(--tj-color-theme-primary);
+			position: absolute;
+			top: -18px;
+			left: -17px;
+		}
+	}
+	@media #{$xs} {
+		margin-bottom: 40px;
+	}
+}
+.client-slider {
+	overflow: hidden;
+	position: relative;
+	z-index: 1;
+	&::before,
+	&::after {
+		content: "";
+		position: absolute;
+		width: 308px;
+		height: 100%;
+		background-image: linear-gradient(
+			90deg,
+			rgba(6, 1, 41, 1) 0%,
+			rgba(6, 1, 41, 0) 100%
+		);
+		top: 0;
+		left: 0;
+		z-index: 2;
+		@media #{$xl, $lg} {
+			width: 300px;
+		}
+		@media #{$md, $sm} {
+			width: 200px;
+		}
+		@media #{$xs} {
+			width: 100px;
+		}
+	}
+	&::after {
+		left: auto;
+		right: 0;
+		background-image: linear-gradient(
+			-90deg,
+			rgba(6, 1, 41, 1) 0%,
+			rgba(6, 1, 41, 0) 100%
+		);
+	}
+
+	.swiper-wrapper {
+		transition-timing-function: linear;
+	}
+}
+
+.client-item {
+	width: auto;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	padding-right: 30px;
+	@media #{$sm, $xs} {
+		padding-right: 20px;
+	}
+}
+.client-logo {
+	width: 195px;
+	height: 74px;
+	background-color: var(--tj-color-theme-bg);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	z-index: 5;
+	border-radius: 8px;
+	img {
+		opacity: 0.8;
+	}
+
+	@media #{$sm, $xs} {
+		width: 170px;
+		height: 60px;
+		padding: 20px;
+	}
+}
+
+/* !END: Client CSS */

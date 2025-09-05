@@ -1,0 +1,60 @@
+@use "../utilities" as *;
+
+/**----------------------------------------
+START: Preloader CSS
+----------------------------------------*/
+.preloader {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 99999;
+	background-color: var(--tj-color-theme-primary);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.loading-container,
+.loading {
+	height: 100px;
+	position: relative;
+	width: 100px;
+	border-radius: 100%;
+}
+
+.loading-container {
+	margin: 40px auto;
+}
+
+.loading {
+	border: 1px solid transparent;
+	border-color: transparent var(--tj-color-common-white) transparent
+		var(--tj-color-common-white);
+	animation: rotate-loading 1.5s linear 0s infinite normal;
+	transform-origin: 50% 50%;
+}
+
+.loading-container:hover .loading,
+.loading-container .loading {
+	transition: all 0.5s ease-in-out;
+}
+
+#loading-icon {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	max-width: 66px;
+	transform: translate(-50%, -50%);
+}
+@keyframes rotate-loading {
+	0% {
+		transform: rotate(0deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+/* !END: Preloader CSS */

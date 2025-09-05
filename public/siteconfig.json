@@ -1,0 +1,21 @@
+{
+  "avatarUrl": "/assets/avatars/brunette_1.glb",
+  "scene": {
+    "background": "#0e0f12"
+  },
+  "camera": {
+    "fov": 35,
+    "position": [
+      0,
+      1.6,
+      2.1
+    ]
+  },
+  "light": {
+    "intensity": 1.2
+  },
+  "audio": {
+    "autostart": false
+  },
+  "poseTemplate": "neutral"
+}

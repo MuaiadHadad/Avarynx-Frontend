@@ -1,0 +1,97 @@
+@use "../utilities" as *;
+
+/**----------------------------------------
+START: CTA CSS
+----------------------------------------*/
+.tj-cta-section {
+	margin-bottom: -40px;
+	@media #{$md, $sm, $xs} {
+		margin-bottom: -50px;
+	}
+}
+.cta-area {
+	background: linear-gradient(
+		90deg,
+		rgba(1, 4, 128, 1) 20%,
+		rgba(255, 0, 127, 1) 75%
+	);
+	position: relative;
+	z-index: 3;
+	overflow: hidden;
+	border-radius: 24px;
+	margin-inline-start: auto;
+	margin-inline-end: auto;
+	.cta-content {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 20px;
+		padding: 60px;
+		.title {
+			max-width: 620px;
+			font-size: 60px;
+			line-height: 1.108;
+			color: var(--tj-color-common-white);
+			margin: 0;
+			@media #{$lg} {
+				max-width: 550px;
+				font-size: 50px;
+			}
+			@media #{$md} {
+				font-size: 45px;
+			}
+			@media #{$sm, $xs} {
+				font-size: 40px;
+			}
+			@media #{$xxs} {
+				font-size: 35px;
+			}
+		}
+		@media #{$lg} {
+			padding: 50px 35px;
+		}
+		@media #{$md} {
+			padding: 30px 30px 40px;
+		}
+		@media #{$sm, $xs} {
+			padding: 30px 22px 40px;
+		}
+	}
+
+	.cta-img {
+		max-width: 290px;
+		position: absolute;
+		bottom: -95px;
+		right: 25%;
+		z-index: -1;
+		@media #{$lg} {
+			right: 20%;
+		}
+		@media #{$md, $sm, $xs} {
+			max-width: 250px;
+			right: 8%;
+			bottom: -90px;
+		}
+	}
+	@media #{$xxl} {
+		max-width: 1236px;
+	}
+	@media #{$xl} {
+		max-width: 1060px;
+	}
+	@media #{$lg} {
+		max-width: 876px;
+	}
+	@media #{$md} {
+		max-width: 630px;
+	}
+	@media #{$sm} {
+		max-width: 460px;
+	}
+	@media #{$md, $sm, $xs} {
+		border-radius: 16px;
+	}
+}
+
+/* !END: CTA CSS */

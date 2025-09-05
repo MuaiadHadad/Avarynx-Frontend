@@ -1,0 +1,199 @@
+@use "../utilities" as *;
+
+/**----------------------------------------
+START: Heading CSS
+----------------------------------------*/
+.sec-heading {
+	margin-inline-start: auto;
+	margin-inline-end: auto;
+	width: 100%;
+	margin-bottom: 52px;
+	&-centered {
+		max-width: 550px;
+		text-align: center;
+	}
+	&-inner {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 20px;
+		.sec-title {
+			max-width: 560px;
+		}
+	}
+
+	.sec-title {
+		margin-bottom: 0;
+		span {
+			color: var(--tj-color-theme-primary);
+		}
+	}
+	.sub-title {
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+		color: var(--tj-color-text-body);
+		font-size: 15px;
+		line-height: 1;
+		letter-spacing: 1.4px;
+		text-transform: uppercase;
+		font-weight: var(--tj-fw-sbold);
+		margin-bottom: 20px;
+		i {
+			color: var(--tj-color-theme-primary);
+			font-size: 20px;
+			line-height: 1;
+			display: inline-flex;
+		}
+		@media #{$md, $sm, $xs} {
+			margin-bottom: 15px;
+		}
+		@media #{$md, $sm, $xs} {
+			font-size: 13px;
+		}
+	}
+	&.style-2 {
+		.sub-title {
+			position: relative;
+			&::before {
+				content: "[";
+				color: var(--tj-color-theme-primary);
+				display: inline-flex;
+				margin-right: 2px;
+			}
+			&::after {
+				content: "]";
+				color: var(--tj-color-theme-primary);
+				display: inline-flex;
+				margin-left: 2px;
+			}
+		}
+	}
+	&.style-3 {
+		.sub-title {
+			padding: 7px 8px;
+			border: 1px solid var(--tj-color-border-1);
+			border-radius: 6px;
+			gap: 6px;
+			i {
+				font-size: 15px;
+			}
+		}
+	}
+	&.style-4 {
+		.sub-title {
+			padding: 7px 8px;
+			color: var(--tj-color-common-white);
+			background-color: var(--tj-color-theme-bg);
+			border-radius: 6px;
+			gap: 6px;
+			i {
+				font-size: 15px;
+			}
+		}
+	}
+
+	@media #{$md, $sm, $xs} {
+		margin-bottom: 35px;
+	}
+}
+
+.heading-wrap-content {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 25px;
+	margin-bottom: 50px;
+	.sec-heading {
+		max-width: 500px;
+		margin-inline-start: 0;
+		margin-inline-end: 0;
+		margin-bottom: 0;
+	}
+	.desc {
+		max-width: 360px;
+		margin-bottom: 0;
+		@media #{$sm, $xs} {
+			max-width: 100%;
+		}
+	}
+	.btn-wrap {
+		max-width: 220px;
+	}
+	@media #{$lg, $md, $sm, $xs} {
+		margin-bottom: 35px;
+	}
+}
+.sec-heading-wrap {
+	.sub-title {
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+		color: var(--tj-color-text-body);
+		font-size: 15px;
+		line-height: 1;
+		letter-spacing: 1.4px;
+		text-transform: uppercase;
+		font-weight: var(--tj-fw-sbold);
+		margin-bottom: 20px;
+		i {
+			color: var(--tj-color-theme-primary);
+			font-size: 20px;
+			line-height: 1;
+			display: inline-flex;
+		}
+		@media #{$md, $sm, $xs} {
+			margin-bottom: 15px;
+		}
+		@media #{$md, $sm, $xs} {
+			font-size: 13px;
+		}
+	}
+
+	&.style-2 {
+		.sub-title {
+			position: relative;
+			&::before {
+				content: "[";
+				color: var(--tj-color-theme-primary);
+				display: inline-flex;
+				margin-right: 2px;
+			}
+			&::after {
+				content: "]";
+				color: var(--tj-color-theme-primary);
+				display: inline-flex;
+				margin-left: 2px;
+			}
+		}
+	}
+}
+.content-wrap {
+	.sec-heading {
+		max-width: 550px;
+		margin: 0 0 15px 0;
+	}
+	.tj-secondary-btn,
+	.tj-primary-btn {
+		margin-top: 25px;
+		@media #{$md, $sm, $xs} {
+			margin-top: 5px;
+		}
+	}
+	.desc {
+		margin-bottom: 0;
+		@media #{$lg, $sm, $xs} {
+			br {
+				display: none;
+			}
+		}
+	}
+	@media #{$md, $sm, $xs} {
+		max-width: 100%;
+		margin-bottom: 35px;
+	}
+}
+
+/* !END: Heading CSS */

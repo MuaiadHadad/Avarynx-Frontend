@@ -1,0 +1,30 @@
+$colors: (
+	common: (
+		white: #ffffff,
+		black: #000000,
+	),
+	heading: (
+		primary: #ffffff,
+	),
+	text: (
+		body: #9692b2,
+		body-2: #524f66,
+	),
+	theme: (
+		primary: #ff007f,
+		bg: #18133b,
+		dark: #060129,
+		dark-2: #65627a,
+	),
+	white: (
+		2: rgba(255, 255, 255, 0.8),
+	),
+	grey: (
+		1: #9692b2,
+		2: #78758f,
+		3: rgba(150, 146, 178, 0.8),
+	),
+	border: (
+		1: #312c52,
+	),
+);

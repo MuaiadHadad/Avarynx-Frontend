@@ -1,0 +1,344 @@
+@use "../utilities" as *;
+
+/**----------------------------------------
+START: Team CSS
+----------------------------------------*/
+.tj-team-section {
+	padding-top: 120px;
+	padding-bottom: 90px;
+	overflow: hidden;
+	.sec-heading {
+		max-width: 550px;
+	}
+	@media #{$lg} {
+		padding-top: 100px;
+		padding-bottom: 70px;
+	}
+	@media #{$md, $sm, $xs} {
+		padding-top: 70px;
+		padding-bottom: 40px;
+	}
+	&-2 {
+		background-color: var(--tj-color-theme-bg);
+		border-radius: 24px;
+		.team-item {
+			.social-links {
+				background-color: var(--tj-color-theme-bg);
+				&::after,
+				&::before {
+					box-shadow: 0 12px 0 0 var(--tj-color-theme-bg);
+				}
+			}
+		}
+	}
+}
+
+.team-wrapper {
+	@media #{$xs} {
+		margin-right: -15px;
+	}
+}
+.team-item {
+	position: relative;
+	z-index: 1;
+	padding: 2px 2px 0 2px;
+	&::before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 0;
+		background-image: linear-gradient(
+			rgb(255, 0, 127) 0%,
+			rgba(255, 0, 127, 0) 100%
+		);
+		opacity: 0;
+		border-radius: 10px;
+		z-index: 2;
+		@include transition(all 0.3s linear 0s);
+	}
+	&::after {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-image: linear-gradient(
+			rgb(255, 0, 127) 0%,
+			rgba(255, 0, 127, 0) 100%
+		);
+		opacity: 0;
+		border-radius: 10px;
+		z-index: -1;
+		@include transition(all 0.3s linear 0s);
+	}
+	.team-img {
+		position: relative;
+		background-color: var(--tj-color-theme-dark);
+		z-index: 1;
+		border-radius: 10px;
+		img {
+			width: 100%;
+			border-radius: 10px;
+			mix-blend-mode: luminosity;
+			@include transition(all 0.3s linear 0s);
+		}
+	}
+	.social-links {
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		@include transition(all 0.3s ease-in-out 0s);
+		background-color: var(--tj-color-theme-dark);
+		border-top-left-radius: 12px;
+		padding: 10px 0 0 10px;
+		z-index: 2;
+		&::after,
+		&::before {
+			content: "";
+			position: absolute;
+			background-color: transparent;
+			top: -25px;
+			right: 0;
+			width: 12px;
+			height: 25px;
+			box-shadow: 0 12px 0 0 var(--tj-color-theme-dark);
+			border-bottom-right-radius: 12px;
+			z-index: -1;
+		}
+		&::after {
+			top: auto;
+			right: auto;
+			bottom: 0;
+			left: -12px;
+		}
+		.share-icon {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			background-color: var(--tj-color-theme-bg);
+			width: 32px;
+			height: 32px;
+			border-radius: 50%;
+			font-size: 16px;
+			color: var(--tj-color-theme-primary);
+			line-height: 1;
+			position: absolute;
+			right: 0;
+			bottom: 0;
+			z-index: 2;
+		}
+		ul {
+			flex-direction: column;
+			justify-content: center;
+			gap: 0;
+			@include transition(all 0.5s ease-in-out 0s);
+			opacity: 0;
+			li {
+				margin-bottom: -32px;
+				&:last-child {
+					margin: 0;
+				}
+				a {
+					font-size: 16px;
+					width: 32px;
+					height: 32px;
+					background-color: var(--tj-color-theme-bg);
+					&:hover {
+						opacity: 1;
+						background-color: var(--tj-color-theme-primary);
+						i {
+							color: var(--tj-color-common-white);
+						}
+					}
+				}
+			}
+		}
+		&:hover {
+			.share-icon {
+				opacity: 0;
+				visibility: hidden;
+				transform: rotate(0);
+			}
+			ul {
+				gap: 6px;
+				opacity: 1;
+				li {
+					margin: 0;
+				}
+			}
+		}
+	}
+
+	.team-content {
+		position: absolute;
+		left: 0;
+		top: 0;
+		padding: 25px 30px;
+		width: 100%;
+		z-index: 3;
+		@media #{$lg, $sm, $xs} {
+			padding: 20px;
+		}
+	}
+	.title {
+		margin-bottom: 0;
+		a {
+			display: inline-block;
+			&:hover {
+				letter-spacing: 0;
+			}
+		}
+	}
+	.designation {
+		font-size: 14px;
+		color: var(--tj-color-text-body-3);
+		line-height: 1;
+		display: inline-flex;
+	}
+	&:hover {
+		&::before {
+			opacity: 0.5;
+			height: 100%;
+		}
+		&::after {
+			opacity: 0.2;
+		}
+		.share-icon {
+			transform: rotate(360deg);
+		}
+	}
+}
+
+// Team section 2
+.team-img-wrap {
+	flex: 1;
+	.team-img {
+		height: 100%;
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			@include transition(all 0.3s ease-in-out 0s);
+			transform: scale(1);
+			border-radius: 12px;
+		}
+	}
+	@media #{$md, $sm, $xs} {
+		order: 2;
+	}
+}
+.team-item-wrap {
+	flex: 1;
+	.team-item {
+		background-color: var(--tj-color-common-white);
+		position: relative;
+		text-align: start;
+		width: 100%;
+		border-radius: 12px;
+		padding: 35px 30px 30px;
+		z-index: 1;
+		overflow: hidden;
+		margin-bottom: 20px;
+		&:last-child {
+			margin-bottom: 0;
+		}
+
+		&::before {
+			content: "\e916";
+			color: var(--tj-color-theme-primary);
+			font-size: 75px;
+			line-height: 1;
+			font-family: "bexon-icons";
+			position: absolute;
+			top: 20px;
+			right: 15px;
+			opacity: 0;
+			visibility: hidden;
+			transform: rotate(-45deg);
+			@media #{$md} {
+				font-size: 65px;
+			}
+			@media #{$sm, $xs} {
+				font-size: 50px;
+				top: 12px;
+			}
+		}
+		.team-content {
+			margin-top: 0;
+			@include transition(all 0.3s ease-in-out 0s);
+		}
+		.title {
+			display: block;
+			font-weight: var(--tj-fw-medium);
+			line-height: 1;
+			transition: none;
+			margin-bottom: 11px;
+		}
+		.designation {
+			font-size: 16px;
+		}
+		.social-links {
+			top: inherit;
+			left: inherit;
+			bottom: 30px;
+			transform: translate(0);
+			ul {
+				justify-content: flex-start;
+				li {
+					a {
+						width: 24px;
+						height: 24px;
+						font-size: 14px;
+						background-color: var(--tj-color-theme-dark);
+						i {
+							color: var(--tj-color-common-white);
+						}
+						&:hover {
+							background-color: var(--tj-color-theme-primary);
+						}
+					}
+				}
+			}
+			@media #{$sm, $xs} {
+				bottom: 20px;
+			}
+		}
+		.desc {
+			opacity: 0;
+			visibility: hidden;
+		}
+
+		&.active {
+			&::before {
+				opacity: 1;
+				visibility: visible;
+			}
+			.team-content {
+				margin-bottom: 110px;
+				@media #{$lg, $md} {
+					margin-bottom: 80px;
+				}
+				@media #{$sm, $xs} {
+					margin-bottom: 50px;
+				}
+			}
+			.social-links {
+				opacity: 1;
+				visibility: visible;
+				transition-delay: 0.2s;
+			}
+		}
+		@media #{$sm, $xs} {
+			padding: 20px;
+		}
+	}
+
+	@media #{$md, $sm, $xs} {
+		order: 1;
+	}
+}
+
+/* !END: Team CSS */

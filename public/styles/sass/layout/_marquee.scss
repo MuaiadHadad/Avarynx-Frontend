@@ -1,0 +1,95 @@
+@use "../utilities" as *;
+
+/**----------------------------------------
+START: Theme Marquee CSS
+----------------------------------------*/
+.tj-marquee-section {
+	background-color: var(--tj-color-theme-primary);
+	position: relative;
+	padding-top: 33px;
+	padding-bottom: 37px;
+	border-radius: 12px;
+	overflow: hidden;
+	@media #{$md, $sm, $xs} {
+		padding-top: 22px;
+		padding-bottom: 16px;
+	}
+}
+
+.marquee {
+	&-slider {
+		padding-bottom: 10px;
+		.swiper-wrapper {
+			transition-timing-function: linear;
+		}
+	}
+	&-area {
+		padding-top: 70px;
+		padding-bottom: 75px;
+		@media #{$lg, $md, $sm, $xs} {
+			padding-top: 50px;
+			padding-bottom: 50px;
+		}
+	}
+	&-item {
+		width: auto;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 35px;
+		padding-right: 35px;
+		.marquee-text {
+			-webkit-text-fill-color: transparent;
+			-webkit-text-stroke: 2px var(--tj-color-common-white);
+			font-size: 160px;
+			font-weight: var(--tj-fw-sbold);
+			font-family: var(--tj-ff-heading);
+			line-height: 1.2;
+			margin: 0;
+			opacity: 0.2;
+			&:hover {
+				opacity: 0.8;
+			}
+			@media #{$xl, $lg} {
+				font-size: 100px;
+			}
+			@media #{$md} {
+				font-size: 80px;
+			}
+			@media #{$sm, $xs} {
+				font-size: 50px;
+				-webkit-text-stroke: 1px var(--tj-color-common-white);
+			}
+		}
+		.marquee-icon {
+			position: relative;
+			top: 4px;
+			color: var(--tj-color-theme-primary);
+			font-size: 40px;
+			line-height: 1;
+			animation: rotateAntiClock 6s linear infinite;
+			img {
+				height: 100%;
+			}
+			@media #{$xl, $lg} {
+				font-size: 35px;
+			}
+			@media #{$md} {
+				font-size: 30px;
+			}
+			@media #{$sm, $xs} {
+				font-size: 22px;
+			}
+		}
+		@media #{$md, $sm} {
+			gap: 25px;
+			padding-right: 25px;
+		}
+		@media #{$xs} {
+			gap: 20px;
+			padding-right: 20px;
+		}
+	}
+}
+
+/* !END: Theme Marquee CSS */
