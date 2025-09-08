@@ -1,111 +1,7 @@
-// utils/lipsyncMap.js — sistema de lipsync otimizado e compatível com TalkingHead
+// utils/lipsyncMap.js — sistema de lipsync otimizado para avatar Camila
 import { safeSetMorph } from './safeMorph.js'
 
-/* --- TalkingHead Oculus visemes support (auto-detect) --- */
-function hasOculusVisemes(mesh){
-  if (!mesh || !mesh.morphTargetDictionary) return false;
-  return Object.keys(mesh.morphTargetDictionary).some(k => /^viseme_/i.test(k));
-}
-function setOculusViseme(mesh, code, value){
-  if (!mesh?.morphTargetDictionary) return false;
-  const dict = mesh.morphTargetDictionary;
-  const infl = mesh.morphTargetInfluences;
-  const prefix = 'viseme_';
-  let applied = false;
-  // Zerar todos os viseme_* rapidamente
-  for (const name in dict){
-    if (name.startsWith(prefix)){
-      infl[dict[name]] = 0;
-    }
-  }
-  const key = prefix + code;
-  if (dict.hasOwnProperty(key)){
-    infl[dict[key]] = Math.max(0, Math.min(1, value));
-    applied = true;
-  }
-  return applied;
-}
-
-/* --- Helpers para nomes L/R e sinónimos comuns (ARKit, RPM, rigs variados) --- */
-const LR_PATTERNS = [
-  ['_L', '_R'], ['Left','Right'], ['.L','.R'], ['-L','-R'], ['_l','_r']
-];
-
-function mirrorNames(name){
-  const out = new Set();
-  for (const [L,R] of LR_PATTERNS){
-    if (name.includes(L)) out.add(name.replace(L,R));
-    if (name.includes(R)) out.add(name.replace(R,L));
-  }
-  return [...out];
-}
-
-// Sinónimos úteis (ajuda a fazer “match” com rigs ARKit/RPM)
-const SYNONYMS = {
-  'Mouth_Smile_L': ['mouthSmileLeft','SmileLeft','smile_L'],
-  'Mouth_Smile_R': ['mouthSmileRight','SmileRight','smile_R'],
-  'Mouth_Stretch_L': ['mouthStretchLeft','StretchLeft','mouthWideLeft'],
-  'Mouth_Stretch_R': ['mouthStretchRight','StretchRight','mouthWideRight'],
-  'Mouth_Pucker_Up_L': ['mouthPuckerLeft','mouthFunnelLeft'],
-  'Mouth_Pucker_Up_R': ['mouthPuckerRight','mouthFunnelRight'],
-  'Mouth_Pucker_Down_L': ['mouthPuckerLeft','mouthFunnelLeft'],
-  'Mouth_Pucker_Down_R': ['mouthPuckerRight','mouthFunnelRight'],
-  'Mouth_Funnel_Up_L': ['mouthFunnelLeft','mouthPuckerLeft'],
-  'Mouth_Funnel_Up_R': ['mouthFunnelRight','mouthPuckerRight'],
-  'Mouth_Funnel_Down_L': ['mouthFunnelLeft','mouthPuckerLeft'],
-  'Mouth_Funnel_Down_R': ['mouthFunnelRight','mouthPuckerRight'],
-  'Mouth_Press_L': ['mouthPressLeft','mouthCloseLeft'],
-  'Mouth_Press_R': ['mouthPressRight','mouthCloseRight'],
-  'V_Open': ['mouthOpen','Mouth_Open','jawOpen'], // abrir genérico
-  'V_Tight_O': ['mouthPucker','mouthFunnel'],
-};
-
-function trySetWithSynonyms(mesh, name, value){
-  let ok = false;
-  ok = safeSetMorph(mesh, name, value) || ok;
-  // tentar sinónimos
-  if (!ok && SYNONYMS[name]) {
-    for (const alt of SYNONYMS[name]) {
-      ok = safeSetMorph(mesh, alt, value) || ok;
-    }
-  }
-  // tentar variantes L/R
-  for (const m of mirrorNames(name)) {
-    ok = safeSetMorph(mesh, m, value) || ok;
-    if (!ok && SYNONYMS[m]) {
-      for (const alt of SYNONYMS[m]) ok = safeSetMorph(mesh, alt, value) || ok;
-    }
-  }
-  return ok;
-}
-
-// setAny balanceado (aplica L+R e sinónimos)
-function setAny(mesh, names, value, intensity = 1.0) {
-  if (!mesh) return false;
-  const adjustedValue = value * intensity;
-  let applied = false;
-  for (const name of names) {
-    applied = trySetWithSynonyms(mesh, name, adjustedValue) || applied;
-  }
-  return applied;
-}
-
-/* --- Config do eixo/ganho da mandíbula (auto-ajustável) --- */
-const JAW_CFG = { axis: 'x', sign: 1, max: 0.35 }; // ajustável conforme o rig
-
-export function setJawAxis(axis='x', sign=1, max=0.35){
-  JAW_CFG.axis = (axis==='x'||axis==='y'||axis==='z') ? axis : 'x';
-  JAW_CFG.sign = Math.sign(sign) || 1;
-  JAW_CFG.max = Math.max(0.05, Math.min(0.7, max));
-}
-
-function applyJawRotation(jawBone, open){
-  if (!jawBone) return;
-  const ang = Math.min(JAW_CFG.max, Math.max(0, open)) * JAW_CFG.sign;
-  jawBone.rotation[JAW_CFG.axis] = ang;
-}
-
-/* --- Mapeamento otimizado para o avatar Camila + genérico --- */
+// Mapeamento otimizado para o avatar Camila com morph targets específicos
 const VISEME_MAP = {
   V: {
     None:        ['V_None'],
@@ -122,7 +18,7 @@ const VISEME_MAP = {
     CH:          ['Mouth_Tighten_L', 'Mouth_Tighten_R', 'V_Affricate'],
     RR:          ['V_RR', 'Mouth_Funnel_Up_L', 'Mouth_Funnel_Up_R']
   },
-  JawOpen: ['CC_Base_JawRoot'] // informativo
+  JawOpen: ['CC_Base_JawRoot'] // Usar o bone específico encontrado
 };
 
 // Intensidade dos visemas (0.0 a 1.0)
@@ -144,30 +40,46 @@ const VISEME_INTENSITY = {
   'sil': 0.0  // Silence
 };
 
-// Abertura da mandíbula por visema (0..1)
+// Mapeamento de abertura da mandíbula por visema
 const JAW_OPENING = {
-  'aa': 0.8,
-  'E':  0.4,
-  'I':  0.2,
-  'O':  0.5,
-  'U':  0.3,
-  'PP': 0.0,
-  'SS': 0.1,
-  'TH': 0.2,
-  'DD': 0.3,
-  'FF': 0.1,
-  'kk': 0.2,
-  'nn': 0.2,
-  'RR': 0.3,
-  'CH': 0.2,
-  'sil':0.0
+  'aa': 0.8,  // Wide open
+  'E': 0.4,   // Medium open
+  'I': 0.2,   // Slightly open
+  'O': 0.5,   // Medium open with rounding
+  'U': 0.3,   // Slightly open with rounding
+  'PP': 0.0,  // Closed
+  'SS': 0.1,  // Very slightly open
+  'TH': 0.2,  // Slightly open
+  'DD': 0.3,  // Medium open
+  'FF': 0.1,  // Very slightly open
+  'kk': 0.2,  // Slightly open
+  'nn': 0.2,  // Slightly open
+  'RR': 0.3,  // Medium open
+  'CH': 0.2,  // Slightly open
+  'sil': 0.0  // Closed
 };
 
-/* --- Reset de morphs relacionados à boca --- */
+// --- helpers aprimorados ---
+function setAny(mesh, names, value, intensity = 1.0) {
+  if (!mesh) return false;
+  const adjustedValue = value * intensity;
+  let applied = false;
+
+  for (const name of names) {
+    if (safeSetMorph(mesh, name, adjustedValue)) {
+      applied = true;
+      console.log(`✅ Aplicado morph: ${name} = ${adjustedValue.toFixed(3)}`);
+    }
+  }
+  return applied;
+}
+
+// ZERA tudo que possa perturbar a boca de forma mais abrangente
 export function resetMouth(mesh) {
   if (!mesh?.morphTargetDictionary) return;
   const dict = mesh.morphTargetDictionary;
 
+  // Padrões mais abrangentes para reset
   const resetPatterns = [
     /^(V_|Mouth_|Jaw_|Tongue_|Lip_|viseme_)/i,
     /^(mouthOpen|mouthClose|mouthSmile|mouthFrown)/i,
@@ -182,9 +94,11 @@ export function resetMouth(mesh) {
   }
 }
 
-/* --- Escolha automática da face mesh --- */
+// Escolhe a malha com mais morphs relevantes de forma mais inteligente
+
 export function pickFaceMesh(root) {
-  // Prefer meshes que tenham morphs de boca/mandíbula e nomes Face/Head/Teeth
+  // Prefer meshes that have mouth/jaw morphs && names like Face/Head,
+  // && penalize ones that look like Brow/Eye-only meshes.
   const preferredName = /face|head|teeth|mouth/i;
   const badName = /brow|eyebrow|lash|lid/i;
 
@@ -203,31 +117,32 @@ export function pickFaceMesh(root) {
     const dict = obj.morphTargetDictionary;
     const names = Object.keys(dict);
 
-    // Quantos dos “wanted” existem
+    // Count how many of the wanted we actually have (exact hits)
     let score = 0;
     for (const nm of wantedMorphs) if (nm in dict) score++;
 
-    // Bónus por morphs que parecem de boca
+    // Extra credit for mouth-related morphs by prefix/substring
     let mouthCount = 0;
     for (const n of names) {
       if (mouthKeys.some(k => n.toLowerCase().includes(k.toLowerCase()))) mouthCount++;
     }
-    score += Math.min(mouthCount, 20) * 0.25;
+    score += Math.min(mouthCount, 20) * 0.25; // soft bonus
 
-    // Heurística do nome
+    // Name heuristic
     let nameScore = 0;
     if (preferredName.test(obj.name)) nameScore += 2;
     if (badName.test(obj.name)) nameScore -= 2;
 
-    // Penalizar meshes de olhos/sobrancelhas com poucos morphs de boca
+    // Penalize meshes with many Eye/Brow-only morphs && very few mouth morphs
     const eyeLike = names.filter(n => /^(eye|eyelid|eyelash|brow)/i.test(n)).length;
     const nonEyeMouth = names.filter(n => /(mouth|lip|jaw|viseme_)/i.test(n)).length;
     if (eyeLike >= 6 && nonEyeMouth < 3) score -= 4;
 
-    // Pequeno bónus por mais morphs no total
+    // Final tie-breaker: prefer more total morphs (but lightly)
     score += names.length * 0.01;
 
-    const better = (score > best.score) || (score === best.score && nameScore > best.nameScore);
+    // Combine with nameScore as tie-breaker
+    const better = (score > best.score) || (score == best.score && nameScore > best.nameScore);
     if (better) {
       best = { mesh: obj, score, nameScore, mouthCount };
     }
@@ -238,12 +153,13 @@ export function pickFaceMesh(root) {
     console.log(`🎯 pickFaceMesh => "${chosen.name}" (score=${best.score.toFixed(2)}, mouthCount=${best.mouthCount})`);
     debugFace(chosen);
   } else {
-    console.warn('⚠️ pickFaceMesh: nenhuma malha facial encontrada; usando fallback.');
+    console.warn('⚠️ pickFaceMesh: nenhuma malha facial encontrada; usa primeira com morphs como fallback.');
   }
   return chosen;
 }
 
-/* --- Debug da malha facial --- */
+
+// Debug aprimorado da malha facial
 export function debugFace(mesh) {
   if (!mesh?.morphTargetDictionary) {
     console.log('❌ Nenhuma malha com morph targets encontrada');
@@ -253,9 +169,10 @@ export function debugFace(mesh) {
   const dict = mesh.morphTargetDictionary;
   const morphNames = Object.keys(dict);
 
-  console.log(`\n🎭 Malha facial: "${mesh.name}"`);
-  console.log(`📊 Morph targets: ${morphNames.length}`);
+  console.log(`\n🎭 Malha facial encontrada: "${mesh.name}"`);
+  console.log(`📊 Total de morph targets: ${morphNames.length}`);
 
+  // Categorizar morphs
   const categories = {
     visemes: morphNames.filter(n => /^(V_|viseme_)/i.test(n)),
     mouth: morphNames.filter(n => /^(mouth|lip)/i.test(n)),
@@ -273,23 +190,19 @@ export function debugFace(mesh) {
     }
   }
 
+  // Verificar compatibilidade com o sistema de lipsync
   const compatibleVisemes = Object.values(VISEME_MAP.V).flat()
     .filter(viseme => viseme in dict);
+
   console.log(`\n✅ Visemas compatíveis encontrados: ${compatibleVisemes.length}`);
   if (compatibleVisemes.length > 0) {
     console.log('Compatible visemes:', compatibleVisemes.join(', '));
   }
 }
 
-/* --- Aplicar visema com intensidade e suavização --- */
+// Aplicar visema com intensidade e suavização aprimoradas
 export function applyViseme(mesh, visemeCode, intensity = 1.0, jawBone = null) {
-  // Preferir targets nativos Oculus se existirem (idêntico ao TalkingHead)
-  if (hasOculusVisemes(mesh)) {
-    const ok = setOculusViseme(mesh, visemeCode, intensity);
-    if (ok) return true;
-  }
-
-  if (!mesh) return false;
+  if (!mesh) return;
 
   // Reset suave ao invés de abrupto
   const currentValues = {};
@@ -300,18 +213,21 @@ export function applyViseme(mesh, visemeCode, intensity = 1.0, jawBone = null) {
       }
     });
   }
+
+  // Aplicar reset gradual
   Object.keys(currentValues).forEach(name => {
     const currentValue = currentValues[name];
-    const newValue = currentValue * 0.7; // decaimento suave
+    const newValue = currentValue * 0.7; // Decaimento suave
     safeSetMorph(mesh, name, newValue);
   });
 
-  // Intensidade base do visema
+  // Aplicar novo visema
   const baseIntensity = VISEME_INTENSITY[visemeCode] || 0.5;
   const finalIntensity = baseIntensity * intensity;
-  let applied = false;
 
-  // Mapeamento principal
+  let applied;
+
+  // Mapear visema para morph targets
   switch (visemeCode) {
     case 'aa':
       applied = setAny(mesh, VISEME_MAP.V.Open, finalIntensity);
@@ -361,18 +277,17 @@ export function applyViseme(mesh, visemeCode, intensity = 1.0, jawBone = null) {
       break;
   }
 
-  // Fallback genérico (ARKit-like) se o mapeamento específico não encontrar nada
+  // Fallback genérico se não encontrou morphs específicos
   if (!applied) {
     let any = false;
     const jawOpenAmount = (JAW_OPENING[visemeCode] || 0) * intensity;
 
-    // Abrir a boca genérico
-    any = safeSetMorph(mesh, 'jawOpen', jawOpenAmount) || any;
+    // Abrir a boca genérico (funciona em muitos avatares)
+    any = safeSetMorph(mesh, 'jawOpen', jawOpenAmount) || any; // alias cobre MouthOpen/mouthOpen
 
-    // Vogais largas (E/I/aa): largura/sorriso bilateral
+    // Largura (E/I/aa): usar stretch/smile
     if (visemeCode === 'E' || visemeCode === 'I' || visemeCode === 'aa') {
       const w = finalIntensity * (visemeCode === 'aa' ? 0.6 : 0.8);
-      any = safeSetMorph(mesh, 'mouthWide', w) || any; // alguns rigs
       any = safeSetMorph(mesh, 'mouthStretchLeft',  w) || any;
       any = safeSetMorph(mesh, 'mouthStretchRight', w) || any;
       any = safeSetMorph(mesh, 'mouthSmileLeft',    w * 0.6) || any;
@@ -385,19 +300,19 @@ export function applyViseme(mesh, visemeCode, intensity = 1.0, jawBone = null) {
       any = safeSetMorph(mesh, 'mouthFunnel', finalIntensity * 0.7) || any;
     }
 
-    // Bilabial (PP) — fechamentos
+    // Bilabial (PP) fecha mais
     if (visemeCode === 'PP') {
       any = safeSetMorph(mesh, 'mouthClose', Math.min(1, 0.85 * intensity)) || any;
       any = safeSetMorph(mesh, 'mouthPressLeft',  Math.min(1, 0.7 * intensity)) || any;
       any = safeSetMorph(mesh, 'mouthPressRight', Math.min(1, 0.7 * intensity)) || any;
     }
 
-    // Fricativas leves (SS/FF/TH)
+    // Fricativas leves (SS/FF/TH) mantém pequena abertura
     if (visemeCode === 'SS' || visemeCode === 'FF' || visemeCode === 'TH') {
       any = safeSetMorph(mesh, 'jawOpen', Math.max(jawOpenAmount, 0.1 * intensity)) || any;
     }
 
-    // Rótico (RR)
+    // Rótico (RR): leve arredondamento sem fechar
     if (visemeCode === 'RR') {
       any = safeSetMorph(mesh, 'mouthFunnel', finalIntensity * 0.4) || any;
     }
@@ -405,21 +320,23 @@ export function applyViseme(mesh, visemeCode, intensity = 1.0, jawBone = null) {
     applied = any;
   }
 
-  // Mandíbula (respeita eixo configurável)
+  // Aplicar movimento da mandíbula se disponível
   if (jawBone && JAW_OPENING[visemeCode] !== undefined) {
-    const jawRotation = JAW_OPENING[visemeCode] * intensity * 0.2; // ganho conservador
-    applyJawRotation(jawBone, jawRotation);
+    const jawRotation = JAW_OPENING[visemeCode] * intensity * 0.2; // Limite máximo de rotação (reduzido)
+    jawBone.rotation.x = jawRotation;
   }
 
   return applied;
 }
 
-/* --- Transição suave entre visemas --- */
+// Reset parcial
+// Função para transição suave entre visemas
 export function blendToViseme(mesh, fromViseme, toViseme, progress, intensity = 1.0, jawBone = null) {
   if (!mesh || progress < 0 || progress > 1) return;
 
+  // Aplicar blend entre os dois visemas
   const fromIntensity = (VISEME_INTENSITY[fromViseme] || 0.5) * (1 - progress) * intensity;
-  const toIntensity   = (VISEME_INTENSITY[toViseme]   || 0.5) * progress * intensity;
+  const toIntensity = (VISEME_INTENSITY[toViseme] || 0.5) * progress * intensity;
 
   // Reset parcial
   resetMouth(mesh);
@@ -432,12 +349,12 @@ export function blendToViseme(mesh, fromViseme, toViseme, progress, intensity = 
     applyViseme(mesh, toViseme, toIntensity, null);
   }
 
-  // Mandíbula blendada
+  // Blend da mandíbula
   if (jawBone) {
     const fromJaw = JAW_OPENING[fromViseme] || 0;
-    const toJaw   = JAW_OPENING[toViseme]   || 0;
-    const blendedJaw = (fromJaw * (1 - progress) + toJaw * progress) * intensity * 0.2;
-    applyJawRotation(jawBone, blendedJaw);
+    const toJaw = JAW_OPENING[toViseme] || 0;
+    const blendedJaw = (fromJaw * (1 - progress) + toJaw * progress) * intensity * 0.2; // reduzido
+    jawBone.rotation.x = blendedJaw;
   }
 }
 

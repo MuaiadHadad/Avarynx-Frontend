@@ -3,16 +3,14 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import GUI from 'lil-gui'
 
 import { getBones, logMissingBones } from './utils/skeletonMap.js'
 import { AvatarAnimator } from './utils/animator.js'
-
-import { LipsyncEn } from './lang/lipsync-en.mjs'
-import { LipsyncPlayer } from './utils/lipsyncPlayer.js'
+import { AdvancedLipsyncSystem } from './utils/advancedLipsync.js'
 import { pickFaceMesh, debugFace, applyViseme, resetMouth } from './utils/lipsyncMap.js'
 
 import { resumeAudioContext } from './utils/audio.js'
+import { AudioVisemeDetector } from './utils/audioViseme.js'
 import { safeSetMorph, findFirstMeshWithMorph } from './utils/safeMorph.js'
 
 // ---------------- DOM ----------------
@@ -37,8 +35,11 @@ const state = {
   eyes: { left: null, right: null },
   animator: null,
   lipsync: null,
+  lipsyncSystem: null,
   faceMesh: null,
   jawBone: null,
+  audioDet: null,
+  micStream: null,
 }
 
 // ---------------- Utils ----------------
@@ -397,24 +398,31 @@ async function tryLoad(url, fileBlob) {
     })
     state.jawBone = jawBone
     console.warn('[LIPSYNC] jawBone =', jawBone?.name || '(none)')
-    debugFace(state.model, faceMesh)
+    // Use debugFace corretamente (passa a mesh facial se existir)
+    debugFace(faceMesh || state.model)
     resolveBlinkMeshes() // prepara as malhas de blink assim que o modelo carrega
     window.blink = (v=1)=>animateBlink(v) // atalho para testares na consola
+
     // ----- olhos: usa ossos (morphs off) -----
     state.animator = new AvatarAnimator(state.model, { useMorphs: false })
 
-    // ----- lipsync player -----
-    state.lipsync = new LipsyncPlayer(state.model, {
-      faceMesh,
-      jawBone,
-      timeScale: 0.06,
+    // ----- lipsync system (avançado) -----
+    state.lipsyncSystem = await AdvancedLipsyncSystem.create(state.model, {
+      debugMode: false,
+      quality: 'high',
+      autoDetectMesh: true,
     })
+    // usar o player interno para o loop
+    state.lipsync = state.lipsyncSystem.player
 
     // expor para consola
     window.__faceMesh = faceMesh
     window.__jawBone  = jawBone
+    state.faceMesh = faceMesh
+    state.jawBone = jawBone
     window.resetMouth = () => resetMouth(faceMesh)
-    window.applyV     = (code='aa', s=1)=> applyViseme(faceMesh, jawBone, code, s)
+    // corrigir ordem: applyViseme(mesh, code, intensity, jawBone)
+    window.applyV     = (code='aa', s=1)=> applyViseme(faceMesh, code, s, jawBone)
 
     if (faceMesh) {
       console.info('[faceMesh]', faceMesh.name)
@@ -432,10 +440,42 @@ async function tryLoad(url, fileBlob) {
   }
 }
 
+// Optional: Web Speech API TTS helper (plays audio while lipsync runs)
+function speakWithWebSpeech(text, { emotion='neutral', rate, pitch } = {}) {
+  try {
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+    const u = new SpeechSynthesisUtterance(text);
+    const presets = {
+      neutral:   { rate: 1.0, pitch: 1.0 },
+      happy:     { rate: 1.1, pitch: 1.15 },
+      sad:       { rate: 0.9, pitch: 0.9 },
+      angry:     { rate: 1.2, pitch: 0.95 },
+      surprised: { rate: 1.05, pitch: 1.2 },
+    };
+    const p = presets[(emotion||'neutral').toLowerCase()] || presets.neutral;
+    u.rate = rate ?? p.rate;
+    u.pitch = pitch ?? p.pitch;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(u);
+  } catch (e) {
+    // no-op if TTS fails
+  }
+}
+
 // ---------------- Events ----------------
 btnResumeAudio?.addEventListener('click', async () => {
   const st = await resumeAudioContext()
   log('AudioContext: ' + st)
+  try {
+    if (!state.audioDet) {
+      const { detector, stream } = await AudioVisemeDetector.fromMic();
+      state.audioDet = detector;
+      state.micStream = stream;
+      log('🎙️ Mic realtime visemes ligado');
+    }
+  } catch (e) {
+    console.warn('Mic permission / setup failed', e);
+  }
 })
 btnLoad?.addEventListener('click', () => {
   const url = inputUrl.value.trim()
@@ -466,14 +506,19 @@ blink?.addEventListener('input', (e) => {
 })
 
 // botão de fala
-const lip = new LipsyncEn()
-btnSpeak?.addEventListener('click', ()=>{
-  if (!state.model || !state.lipsync) return
+btnSpeak?.addEventListener('click', async ()=>{
+  if (!state.model || !state.lipsyncSystem) return
   const s = (txt?.value || 'Testing one two three.').trim()
   if (!s) return
-  const seq = lip.wordsToVisemes(lip.preProcessText(s))
-  state.lipsync.loadSequence(seq, 0.06)
-  state.lipsync.play()
+  await resumeAudioContext()
+  const emotion = 'neutral'
+  state.lipsyncSystem.setEmotion?.(emotion)
+  try {
+    speakWithWebSpeech(s, { emotion })
+    await state.lipsyncSystem.speak(s, { emotion })
+  } catch (err) {
+    console.error('speak failed', err)
+  }
 })
 
 // ---------------- Loop ----------------
@@ -482,6 +527,10 @@ function tick() {
   const dt = clock.getDelta()
   state.animator?.update(dt)
   state.lipsync?.update(dt)
+  if (state.audioDet && state.faceMesh) {
+    const r = state.audioDet.update(dt)
+    if (r) applyViseme(state.faceMesh, r.code, r.intensity, state.jawBone)
+  }
   updateBlink(dt)
   renderer.render(scene, camera)
   requestAnimationFrame(tick)

@@ -1,3 +1,4 @@
+
 /**
 * @class English lip-sync processor
 * @author Mika Suominen
@@ -460,271 +461,73 @@ class LipsyncEn {
 
       // Process the remaining numbers
       r = r.replace(/-?(?:\d{1,3}(?:,\d{3})+|\d+)(\.\d+)?/g, (match, decimal) => {
-          let s = match;
-
-          // Remove commas and handle negative
-          let isNegative = false;
-          if (s.startsWith('-')) {
-            isNegative = true;
-            s = s.substring(1);
-          }
-          s = s.replace(/,/g, '');
-
-          let result = '';
-          if (isNegative) result += 'negative ';
-
-          if (decimal) {
-            const [intPart, decPart] = s.split('.');
-            result += this.convertNumberToWords(intPart) + ' point ';
-            for (const digit of decPart) {
-              result += this.digits[parseInt(digit)] + ' ';
-            }
-          } else {
-            result += this.convertNumberToWords(s);
-          }
-
-          return result.trim();
-        });
+        let s = match;
+        let isNotSpecial = false;
+        if ( /,/.test(s) ) {
+          s = s.replace( /,/g, "" );
+          isNotSpecial = true;
+        }
+        if ( decimal ) {
+          isNotSpecial = true;
+        }
+        return this.convertNumberToWords(s, isNotSpecial);
+      });
     }
 
-    // Clean multiple spaces
-    r = r.replace(/\s+/g, ' ');
+    r = r.replace(/(\D)\1\1+/g, "$1$1") // max 2 repeating chars
+      .replaceAll('  ',' ') // Only one repeating space
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '').normalize('NFC') // Remove non-English diacritics
+      .trim();
 
-    return r.trim().toUpperCase();
+    return r;
   }
 
+
   /**
-   * Convert word to phonetic visemes sequence
-   * @param {string} word - Word to convert
-   * @return {string} Viseme sequence
-   */
-  convertWord(word) {
-    if (!word) return '';
+  * Convert word to Oculus LipSync Visemes and durations
+  * @param {string} w Text
+  * @return {Object} Oculus LipSync Visemes and durations.
+  */
+  wordsToVisemes(w) {
+    let o = { words: w.toUpperCase(), visemes: [], times: [], durations: [], i:0 };
+    let t = 0;
 
-    console.log(`🔍 Convertendo palavra: "${word}"`);
-
-    // Primeiro, tentar regras específicas para palavras comuns
-    const commonWords = {
-      'TYPE': 'DD aa PP',
-      'A': 'aa',
-      'LINE': 'nn aa nn',
-      'IN': 'I nn',
-      'ENGLISH': 'I nn kk nn I SS',
-      'HELLO': 'I E nn O',
-      'WORLD': 'FF E RR nn DD',
-      'HOW': 'I aa',
-      'ARE': 'aa RR',
-      'YOU': 'I U',
-      'TODAY': 'DD U DD E'
-    };
-
-    const upperWord = word.toUpperCase().replace(/[^\w]/g, ''); // Remove pontuação
-
-    if (commonWords[upperWord]) {
-      console.log(`📚 Palavra comum encontrada: "${upperWord}" -> "${commonWords[upperWord]}"`);
-      return commonWords[upperWord];
-    }
-
-    let result = '';
-    let i = 0;
-
-    console.log(`🔤 Processando letra por letra: "${word}"`);
-
-    while (i < word.length) {
-      let found = false;
-      const char = word[i].toUpperCase();
-
-      // Pular caracteres não alfabéticos
-      if (!/[A-Z]/.test(char)) {
-        i++;
-        continue;
-      }
-
-      console.log(`🔍 Processando char: "${char}" na posição ${i}`);
-
-      if (this.rules[char]) {
-        for (const rule of this.rules[char]) {
-          try {
-            const testString = word.substring(i).toUpperCase();
-            const match = testString.match(rule.regex);
-
-            if (match && match.index === 0) {
-              const visemes = rule.visemes.join(' ');
-              console.log(`✅ Regra aplicada: "${testString}" -> "${visemes}"`);
-              result += visemes + ' ';
-              i += rule.move;
-              found = true;
-              break;
-            }
-          } catch (error) {
-            console.warn(`⚠️ Erro na regra para "${char}":`, error);
+    const chars = [...o.words];
+    while( o.i < chars.length ) {
+      const c = chars[o.i];
+      const ruleset = this.rules[c];
+      if ( ruleset ) {
+        for(let i=0; i<ruleset.length; i++) {
+          const rule = ruleset[i];
+          const test = o.words.substring(0, o.i) + c.toLowerCase() + o.words.substring(o.i+1);
+          let matches = test.match(rule.regex);
+          if ( matches ) {
+            rule.visemes.forEach( viseme => {
+              if ( o.visemes.length && o.visemes[ o.visemes.length - 1 ] === viseme ) {
+                const d = 0.7 * (this.visemeDurations[viseme] || 1);
+                o.durations[ o.durations.length - 1 ] += d;
+                t += d;
+              } else {
+                const d = this.visemeDurations[viseme] || 1;
+                o.visemes.push( viseme );
+                o.times.push(t);
+                o.durations.push( d );
+                t += d;
+              }
+            })
+            o.i += rule.move;
+            break;
           }
-        }
-      }
-
-      if (!found) {
-        // Fallback para caracteres individuais
-        const fallbacks = {
-          'A': 'aa', 'E': 'E', 'I': 'I', 'O': 'O', 'U': 'U',
-          'B': 'PP', 'P': 'PP', 'M': 'PP',
-          'F': 'FF', 'V': 'FF',
-          'T': 'DD', 'D': 'DD', 'N': 'nn', 'L': 'nn',
-          'S': 'SS', 'Z': 'SS', 'C': 'SS',
-          'K': 'kk', 'G': 'kk',
-          'R': 'RR',
-          'H': '', // H é frequentemente silencioso
-          'Y': 'I', 'W': 'U'
-        };
-
-        if (fallbacks[char]) {
-          console.log(`🔄 Fallback aplicado: "${char}" -> "${fallbacks[char]}"`);
-          result += fallbacks[char] + ' ';
-        } else {
-          console.log(`❌ Char não reconhecido: "${char}"`);
-        }
-        i++;
-      }
-    }
-
-    const finalResult = result.trim();
-    console.log(`🎯 Resultado final: "${word}" -> "${finalResult}"`);
-    return finalResult;
-  }
-
-  /**
-   * Convert sentence to viseme sequence with timing
-   * @param {string} text - Input text
-   * @param {number} speed - Speaking speed multiplier (1.0 = normal)
-   * @return {Object} Sequence object with visemes, times, and durations
-   */
-  convertSentence(text, speed = 1.0) {
-    const processed = this.preProcessText(text);
-    const words = processed.split(/\s+/).filter(w => w.length > 0);
-
-    const visemes = [];
-    const times = [];
-    const durations = [];
-    let currentTime = 0;
-
-    console.log(`🔤 Processando palavras: [${words.join(', ')}]`);
-
-    for (let wordIndex = 0; wordIndex < words.length; wordIndex++) {
-      const word = words[wordIndex];
-      const wordVisemes = this.convertWord(word);
-
-      console.log(`📝 Palavra "${word}" -> "${wordVisemes}"`);
-
-      if (wordVisemes) {
-        const phonemes = wordVisemes.split(/\s+/).filter(p => p.length > 0);
-
-        for (const phoneme of phonemes) {
-          visemes.push(phoneme);
-          times.push(currentTime);
-
-          // Get duration for this viseme (aumentar durações mínimas)
-          const baseDuration = this.visemeDurations[phoneme] || 1.0;
-          const adjustedDuration = Math.max(0.1, baseDuration / speed); // Mínimo 100ms
-          durations.push(adjustedDuration);
-
-          currentTime += adjustedDuration;
         }
       } else {
-        // Se a palavra não gerou visemas, adicionar silêncio
-        visemes.push('sil');
-        times.push(currentTime);
-        durations.push(0.1 / speed);
-        currentTime += 0.1 / speed;
-      }
-
-      // Add pause between words (aumentar pausa)
-      if (wordIndex < words.length - 1) {
-        visemes.push('sil');
-        times.push(currentTime);
-        durations.push(0.2 / speed); // Pausa mais longa
-        currentTime += 0.2 / speed;
+        o.i++;
+        t += this.specialDurations[c] || 0;
       }
     }
 
-    // Adicionar silêncio no final
-    visemes.push('sil');
-    times.push(currentTime);
-    durations.push(0.3); // Silêncio final mais longo
-    currentTime += 0.3;
-
-    console.log(`🎵 Sequência final: ${visemes.length} visemas, duração total: ${currentTime.toFixed(2)}s`);
-    console.log(`📋 Visemas: [${visemes.join(', ')}]`);
-
-    return { visemes, times, durations };
+    return o;
   }
 
-  /**
-   * Enhanced text processing with emotion and emphasis
-   * @param {string} text - Input text
-   * @param {Object} options - Processing options
-   * @return {Object} Enhanced sequence with emotion data
-   */
-  convertWithEmotion(text, options = {}) {
-    const {
-      speed = 1.0,
-      emotion = 'neutral', // neutral, happy, sad, angry, surprised
-      emphasis = 1.0 // emphasis multiplier
-    } = options;
-
-    // Detect punctuation for emotional cues
-    const hasExclamation = /!/.test(text);
-    const hasQuestion = /\?/.test(text);
-    const hasEllipsis = /\.{3}/.test(text);
-
-    let emotionSpeed = speed;
-    let emotionEmphasis = emphasis;
-
-    // Adjust based on emotion
-    switch (emotion) {
-      case 'happy':
-        emotionSpeed *= 1.1; // Slightly faster
-        emotionEmphasis *= 1.2;
-        break;
-      case 'sad':
-        emotionSpeed *= 0.8; // Slower
-        emotionEmphasis *= 0.9;
-        break;
-      case 'angry':
-        emotionSpeed *= 1.3; // Faster
-        emotionEmphasis *= 1.4;
-        break;
-      case 'surprised':
-        emotionSpeed *= 1.2;
-        emotionEmphasis *= 1.3;
-        break;
-    }
-
-    // Adjust based on punctuation
-    if (hasExclamation) {
-      emotionSpeed *= 1.1;
-      emotionEmphasis *= 1.2;
-    }
-    if (hasQuestion) {
-      emotionEmphasis *= 1.1;
-    }
-    if (hasEllipsis) {
-      emotionSpeed *= 0.9;
-    }
-
-    const sequence = this.convertSentence(text, emotionSpeed);
-
-    // Apply emphasis to durations
-    if (emotionEmphasis !== 1.0) {
-      sequence.durations = sequence.durations.map(d => d * emotionEmphasis);
-    }
-
-    return {
-      ...sequence,
-      emotion,
-      emphasis: emotionEmphasis,
-      originalSpeed: speed,
-      adjustedSpeed: emotionSpeed
-    };
-  }
 }
 
 export { LipsyncEn };
